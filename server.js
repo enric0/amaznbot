@@ -14,11 +14,16 @@ awscred = JSON.parse(awscred);
 // Setup polling way
 var bot = new TelegramBot(token, {polling: true});
 
+// REGION
+var region = "es"
 var options = {
-  host: "webservices.amazon.es",
-  region: "ES",
+  host: "webservices.amazon.",
   version: "2011-08-01"
 };
+
+options.host+=region;
+options.region=region.toUpperCase();
+
 var prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
 
 console.log('BOT STARTED');
@@ -90,5 +95,28 @@ bot.on('inline_query', function (msg) {
       console.log(msg)
       bot.answerInlineQuery(msg.id, itemsList);
     })
+  }else{
+    console.log("TEST")
+            // RESULT
+        var itemsList = [];
+        var itemObj = {};
+        itemObj.parse_mode = 'Markdown';
+        itemObj.type='article';
+        itemObj.id= 'id:'+(process.hrtime());
+        itemObj.title = "Italiano";
+        itemObj.description = "Inserisci l'italiano come lingua di default";
+        itemObj.message_text= "Hai scelto Italiano";
+        itemsList.push(itemObj);
+
+        itemObj = {};
+        itemObj.parse_mode = 'Markdown';
+        itemObj.type='article';
+        itemObj.id= 'id:'+(process.hrtime());
+        itemObj.title = "Espanol";
+        itemObj.description = "Tu haber empostado espanol es tu lingua principal";
+        itemObj.message_text= "Tu haber empostado espanol";
+        itemsList.push(itemObj);
+
+        bot.answerInlineQuery(msg.id, itemsList);
   }
 });
