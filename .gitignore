@@ -11,4 +11,6 @@ aws
 
 .idea/encodings.xml
 
+npm-debug.log
+
 *.xml
