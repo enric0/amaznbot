@@ -15,4 +15,8 @@ npm-debug.log
 
 *.xml
 
+<<<<<<< HEAD
 npm-debug.log
+=======
+db/amaznbot.db
+>>>>>>> 4d91f8ee93b5836d989d5ba1c03e84d2cbaa373d

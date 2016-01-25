@@ -1,10 +1,9 @@
-var TelegramBot = require('node-telegram-bot-api');
 
+//REQUIRED MODULES
+var TelegramBot = require('node-telegram-bot-api');
 var fs = require('fs');
 var aws = require("aws-lib");
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-
+var sqlite3 = require('sqlite3').verbose();
 
 //http://stackoverflow.com/questions/10805125/how-to-remove-all-line-breaks-from-a-string
 var token = fs.readFileSync("token", "utf8");
@@ -80,63 +79,77 @@ var regions = [
                 }
               ];
 
-var userData={};
+var regionsId = [];
+regions.forEach(function(o){
+  regionsId.push(o.id);
+});
 
-var options = {
-  host: "webservices.amazon.",
-  version: "2011-08-01"
-};
+var languagesList = "";
+regions.forEach(function(region){
+  languagesList+="\n    *"+region.id+"* - "+region.name;
+});
 
-options.host+=region;
-options.region=region.toUpperCase();
+//CREATE DB AND TABLE
+var db = new sqlite3.Database('db/amaznbot.db');
+db.serialize(function() {
+  db.run("CREATE TABLE IF NOT EXISTS users (user_id text primary key, lang text)");
+});
 
-var prod;
 
 console.log('BOT STARTED');
 
-var isUserNew = function(msg){
-  //check if user is new
-  var isnew;
-  if(msg.id != "25419539"){
-    console.log("user: "+msg.from.id+" is NEW")
-    //scrivi sul database e mostra il messaggio
-  }else{
-    console.log("user: "+msg.from.id+" is NOT NEW")
-    // retrieve information about region call api server
-    prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
-  }
+
+var newUserAlert = function(msg){
+  var itemObj = {},
+  itemsList = [];
+  // RESULT User not defined
+  itemObj.parse_mode = 'Markdown';
+  itemObj.type = 'article';
+  itemObj.id = 'id:' + (process.hrtime());
+  var langChoice = '*Hi '+msg.from.first_name+'*, and welcome to amaznbot.'
+                  +'\n\n Click -> @amaznbot and *set your language*'
+                  +'\n    *Example:* _/lang it_ \n\n *Language:*\n'
+                  + languagesList;
+  itemObj.title = "Hi, "+msg.from.first_name+" please add a language @amaznbot";
+  itemObj.description = "Click here for instructions";
+  itemObj.message_text = langChoice;
+
+  itemsList.push(itemObj);
+
+  bot.answerInlineQuery(msg.id, itemsList);
 }
 
-/* Any kind of message */
-bot.on('inline_query', function (msg) {
 
-  /***************************** HOW IT WORKS *****************************
-     Every time it receives a query it goes to read the user informations
-     and retrieves the region than it creates the right ProdAdvClient and
-     executes the query.
-     */
-  //isUserNew(msg);
+var provideResult = function(msg,row){
+  var fin = "";
+  regions.forEach(function(o){if(o.id==row.lang){fin=o.code;}});
+  console.log(fin)
+  var options = {
+    host: "webservices.amazon."+fin,
+    version: "2011-08-01"
+  };
+
+  options.region=row.lang.toUpperCase();
+
+  var prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
 
 
-  console.log("inline_query: "+msg.query+" - "+msg.query.length+" from: "+msg.from.id)
-  if(msg.query.length<=0) {
-    console.log("ZERO")
-    var itemObj = {},
-    itemsList = [];
-    // RESULT
-    itemObj.parse_mode = 'Markdown';
-    itemObj.type = 'article';
-    itemObj.id = 'id:' + (process.hrtime());
-    itemObj.title = "Please add a default language"
-    itemObj.description = "I'm just here to remind you to add a default text";
-    itemObj.message_text = "Please add a default language";
+    if(msg.query.length<=0) {
+      console.log("ZERO")
+      var itemObj = {},
+      itemsList = [];
+      // RESULT
+      itemObj.parse_mode = 'Markdown';
+      itemObj.type = 'article';
+      itemObj.id = 'id:' + (process.hrtime());
+      itemObj.title = "Please add a term"
+      itemObj.description = "I'm just here to remind you to add a default text";
+      itemObj.message_text = "Please add a default language";
 
-    itemsList.push(itemObj);
+      itemsList.push(itemObj);
 
-    bot.answerInlineQuery(msg.id, itemsList);
-  }else{
-    console.log("TEST");
-      //console.log("query.length > 0")
+      bot.answerInlineQuery(msg.id, itemsList);
+    }else{
       prod.call("ItemSearch", {
         SearchIndex: "All",
         Keywords: msg.query,
@@ -145,7 +158,7 @@ bot.on('inline_query', function (msg) {
         if(result && result.Items && result.Items.Item){
 
           var itemsList = [];
-          console.log(JSON.stringify(result));
+          //console.log(JSON.stringify(result));
           result.Items.Item.forEach(function (item) {
 
             var itemObj = {};
@@ -211,5 +224,73 @@ bot.on('inline_query', function (msg) {
         }
       })
     }
+};
 
+
+/********************
+ *      INLINE      *
+ ********************/
+
+bot.on('inline_query', function (msg) {
+  /***************************** HOW IT WORKS *****************************
+     Every time it receives a query it goes to read the user informations
+     and retrieves the region than it creates the right ProdAdvClient and
+     executes the query.
+     */
+  console.log("inline_query: "+msg.query+" - "+msg.query.length+" from: "+msg.from.id)
+
+  db.serialize(function() {
+    db.get("SELECT user_id,lang FROM users WHERE user_id=?",msg.from.id, function(err, row) {
+      // the user is new
+      if(row==undefined){
+        newUserAlert(msg);
+      }else{
+        // if exists go and does the search then gives back the results
+        provideResult(msg,row)
+      }
+    });
+  });
 });
+
+
+/********************
+ *     SETTINGS     *
+ ********************/
+
+bot.onText(/\/lang (.+)/, function (msg, match) {
+  var fromId = msg.from.id;
+  if(regionsId.indexOf(match[1])>-1){
+    setLang(msg.from.id, match[1])
+  }else{
+    bot.sendMessage(fromId, "*Language NOT present* 😞, choose from:\n"+ languagesList, {"parse_mode":"Markdown"});
+  }
+});
+
+bot.onText(/\/help/, function (msg, match) {
+  var fromId = msg.from.id;
+  bot.sendMessage(fromId, "*How to use @amaznbot* \n TBD", {"parse_mode":"Markdown"});
+});
+
+bot.onText(/\/about/, function (msg, match) {
+  var fromId = msg.from.id;
+  bot.sendMessage(fromId, "*Made with* <3 by two humans ", {"parse_mode":"Markdown"});
+});
+
+var setLang = function(userid, lang){
+  console.log(userid, "user: "+userid+" lang: "+lang);
+  //var stmt = db.prepare();
+  db.run("INSERT INTO users VALUES ($id,$lang)", {
+    $id: userid,
+    $lang: lang
+  }, function(err){
+    if(err){
+      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
+        $id: userid,
+        $lang: lang
+      });
+    }else{
+      console.log("User info inserted")
+    }
+  });
+  //stmt.finalize();
+}
