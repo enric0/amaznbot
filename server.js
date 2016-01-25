@@ -17,25 +17,70 @@ awscred = JSON.parse(awscred);
 var bot = new TelegramBot(token, {polling: true});
 
 // REGION
-var region = "it"
+var regions = [
+                {
+                  "id"   : "br" ,
+                  "name" : "Brazil",
+                  "code" : "br"
+                },
+                {
+                  "id"   : "ca" ,
+                  "name" : "Canada",
+                  "code" : "ca"
+                },
+                {
+                  "id"   : "cn",
+                  "name" : "China",
+                  "code" : "cn"
+                },
+                {
+                  "id"   : "fr",
+                  "name" : "France",
+                  "code" : "fr"
+                },
+                {
+                  "id"   : "de",
+                  "name" : "Germany",
+                  "code" : "de"
+                },
+                {
+                  "id"   : "in",
+                  "name" : "India",
+                  "code" : "in"
+                },
+                {
+                  "id"   : "it",
+                  "name" : "Italia",
+                  "code" : "it"
+                },
+                {
+                  "id"   : "jp",
+                  "name" : "Japan",
+                  "code" : "co.jp"
+                },
+                {
+                  "id"   : "mx",
+                  "name" : "Mexico",
+                  "code" : "com.mx"
+                },
+                {
+                  "id"   : "es",
+                  "name" : "Spain",
+                  "code" : "es"
+                },
+                {
+                  "id"   : "uk",
+                  "name" : "United Kingdom",
+                  "code" : "co.uk"
+                },
+                {
+                  "id"   : "us",
+                  "name" : "United Sates",
+                  "code" : "com"
+                }
+              ];
+
 var userData={};
-
-var url = 'mongodb://localhost:27017/amaznbotdb';
-
-
-
-var insertDocument = function(db,data,callback) {
-  console.log("insertDocument ..")
-  if (db.collection('users').find( { ":_id": data._id }).length==0)
-    db.collection('users').insertOne( {
-      "_id" : data._id
-  }
-  , function(err, result) {
-    assert.equal(err, null);
-    console.log("Inserted a user.");
-    callback(result);
-  });
-};
 
 var options = {
   host: "webservices.amazon.",
@@ -45,26 +90,50 @@ var options = {
 options.host+=region;
 options.region=region.toUpperCase();
 
-var prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
+var prod;
 
 console.log('BOT STARTED');
+
+var isUserNew = function(msg){
+  //check if user is new
+  var isnew;
+  if(msg.id != "25419539"){
+    console.log("user: "+msg.from.id+" is NEW")
+    //scrivi sul database e mostra il messaggio
+  }else{
+    console.log("user: "+msg.from.id+" is NOT NEW")
+    // retrieve information about region call api server
+    prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
+  }
+}
 
 /* Any kind of message */
 bot.on('inline_query', function (msg) {
 
-  //save user info
-  userData._id=msg.from.id;
-  MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
+  /***************************** HOW IT WORKS *****************************
+     Every time it receives a query it goes to read the user informations
+     and retrieves the region than it creates the right ProdAdvClient and
+     executes the query.
+     */
+  //isUserNew(msg);
 
-    insertDocument(db,userData, function() {
-      db.close();
-    });
-  });
 
-  console.log("inline_query: "+msg.query+" from: "+msg.from.id)
+  console.log("inline_query: "+msg.query+" - "+msg.query.length+" from: "+msg.from.id)
   if(msg.query.length<=0) {
-    console.log("Query length 0")
+    console.log("ZERO")
+    var itemObj = {},
+    itemsList = [];
+    // RESULT
+    itemObj.parse_mode = 'Markdown';
+    itemObj.type = 'article';
+    itemObj.id = 'id:' + (process.hrtime());
+    itemObj.title = "Please add a default language"
+    itemObj.description = "I'm just here to remind you to add a default text";
+    itemObj.message_text = "Please add a default language";
+
+    itemsList.push(itemObj);
+
+    bot.answerInlineQuery(msg.id, itemsList);
   }else{
     console.log("TEST");
       //console.log("query.length > 0")
