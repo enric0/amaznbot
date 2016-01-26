@@ -122,7 +122,7 @@ var newUserAlert = function(msg){
 
   itemsList.push(itemObj);
 
-  bot.answerInlineQuery(msg.id, itemsList,{"cache_time" : 0});
+  bot.answerInlineQuery(msg.id, itemsList,{"cache_time" : 0, "is_personal":true});
 }
 
 
@@ -154,14 +154,14 @@ var provideResult = function(msg,row){
 
       itemsList.push(itemObj);
 
-      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 0});
+      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 600,  "is_personal":true});
     }else{
       prod.call("ItemSearch", {
         SearchIndex: "All",
         Keywords: msg.query,
         ResponseGroup: "Offers,ItemAttributes,Images,Reviews"
       }, function (err, result) {
-        if(result && result.Items && result.Items.Item){
+        if(result && result.Items && result.Items.Item && result.Items.Item.length>0){
 
           var itemsList = [];
           //console.log(JSON.stringify(result));
@@ -170,27 +170,30 @@ var provideResult = function(msg,row){
             var itemObj = {};
             var keepaUrl = "https://dyn.keepa.com/pricehistory.png?asin=";
             var keepaDomain = "&domain="+row.lang;
-            var gsmarena = "http://www.gsmarena.com/results.php3?sQuickSearch=yes&sName=";
+            //var gsmarena = "http://www.gsmarena.com/results.php3?sQuickSearch=yes&sName=";
 
             var msg_txt = '';
-
+            //console.log(item);
             if(item.LargeImage && item.LargeImage.URL)
               msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
 
             msg_txt += "\n*"+item.ItemAttributes.Title+"*";
-            msg_txt += " ▶️ [ Detail ]("+item.DetailPageURL+")";
+            msg_txt += "\n▶️ [ Detail ]("+item.DetailPageURL+")";
+            if(item.CustomerReviews && item.CustomerReviews.IFrameURL)
+              msg_txt += "\n⭐️[ Reviews ]("+item.DetailPageURL+")";
             //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
             //msg_txt+="\n\n"+args.star+" ⭐️";
             if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing) {
               msg_txt += "\n\n*"+trad[row.lang].price+"*: " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
               //console.log(prod.title+" - "+args.price.length)
               if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
-                console.log("PRIME")
-                msg_txt += " - ✔️ Prime"
+                //console.log("PRIME")
+                msg_txt += " - ✓Prime"
               }
               msg_txt += "\n  _" + item.Offers.Offer.OfferListing.Availability + "_";
             }
 
+            //console.log(item.Offers);
             msg_txt += "\n"
             if (item.OfferSummary && item.OfferSummary.LowestNewPrice && item.OfferSummary.LowestNewPrice.Amount) {
               msg_txt += "\n*"+trad[row.lang].new+":* " + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
@@ -198,34 +201,39 @@ var provideResult = function(msg,row){
             if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
               msg_txt += "\n*"+trad[row.lang].used+":* " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
             }
+
+            var feature_txt = '';
             if(item.ItemAttributes.Feature){
-              msg_txt += "\n\n*Features*"
+              feature_txt += "\n\n*Features*"
               if(item.ItemAttributes.Feature.length>0){
                 for(var i=0;i<item.ItemAttributes.Feature.length;i++){
-                  msg_txt += "\n🔹"+item.ItemAttributes.Feature[i];
+                  feature_txt += "\n🔹"+item.ItemAttributes.Feature[i];
                 }
               }
             }
+            feature_txt = feature_txt.substring(0,150);
+            feature_txt+="\n ...";
+            console.log("feature.length: "+feature_txt.length);
 
-            msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.asin+keepaDomain+")";
-            if(item.ItemAttributes.ProductTypeName=="PHONE"){
+            msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.ASIN+keepaDomain+")";
+            /*if(item.ItemAttributes.ProductTypeName=="PHONE"){
               var gsma_query = msg.query;
-              gsma_query.replace(/\s/g, '&20');
+              gsma_query.replace(/\s/g, '+');
               msg_txt+="\n\n [‌‌GSMArena info]("+gsmarena+gsma_query+")"
-            }
+            }*/
 
-            ///// DESCRIPTION
+            ///// DESCRIPTION //////
             var desc = "";
             /*if (item.Offers && item.Offers.Offer != null && item.Offers.Offer.OfferListing != null) {
               desc += trad[row.lang].price+": " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
             }*/
             if (item.OfferSummary && item.OfferSummary.LowestNewPrice)
-              desc += ""+trad[row.lang].new+":" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+              desc += trad[row.lang].new+":" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
             if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
               desc += " - "+trad[row.lang].used+": " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
             }
             if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
-              desc += " - ✔️ Prime"
+              desc += " ✓Prime"
             }
 
             // RESULT
@@ -234,19 +242,28 @@ var provideResult = function(msg,row){
             itemObj.id = 'id:' + (process.hrtime());
             itemObj.title = item.ItemAttributes.Title;
             itemObj.description = desc;
-            itemObj.message_text = msg_txt;
+            console.log("desc.length: "+desc.length)
+            //itemObj.url = item.DetailPageURL;
+            var txt=msg_txt;
+            txt+=feature_txt;
+            itemObj.message_text = txt;
+            console.log(txt);
+            console.log("txt.length: "+txt.length)
+
             if(item.SmallImage && item.SmallImage.URL)
               itemObj.thumb_url = item.SmallImage.URL;
-            itemObj.thumb_width = 100;
-            itemObj.thumb_height = 100;
+            itemObj.url = item.DetailPageURL;
+            itemObj.hide_url = true;
+            itemObj.thumb_width = 150;
+            itemObj.thumb_height = 150;
             itemObj.disable_web_page_preview = false;
 
             itemsList.push(itemObj);
           });
 
           //bot.sendMessage(msg.chat.id, item.MediumImage.URL)
-          console.log(msg)
-          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 10});
+          //console.log(msg)
+          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 30,  "is_personal":true});
         }else{
           console.log("no item found")
           console.log("ZERO SEARCH")
@@ -256,12 +273,13 @@ var provideResult = function(msg,row){
           itemObj.parse_mode = 'Markdown';
           itemObj.type = 'article';
           itemObj.id = 'id:' + (process.hrtime());
-          itemObj.title = "No results :-("//;msg.from.first_name+", "+trad[row.lang].queryZeroTitle;
+          itemObj.title = "No results 😔"//;msg.from.first_name+", "+trad[row.lang].queryZeroTitle;
           itemObj.description = "I'm sorry but there are no results";//[row.lang].queryZeroDesc;
           itemObj.message_text = 'No results';//trad[row.lang].queryZeroTxt;
 
+
           itemsList.push(itemObj);
-          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 0});
+          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 600,  "is_personal":true});
         }
 
       });
@@ -301,14 +319,14 @@ var fastSearchResult = function(msg,lang){
 
       bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 10});
     }else{
-      console.log("calling product search")
+      //console.log("calling product search")
       prod.call("ItemSearch", {
         SearchIndex: "All",
         Keywords: msg.query,
         ResponseGroup: "Offers,ItemAttributes,Images,Reviews"
       }, function (err, result) {
-        console.log("result")
-        if(result && result.Items && result.Items.Item && result.Items.Item.length>0){
+        //console.log("result")
+        if(result && result.Items && result.Items.Item && result.Items.Item && result.Items.Item.length>0){
 
           var itemsList = [];
           //console.log(JSON.stringify(result));
@@ -324,7 +342,7 @@ var fastSearchResult = function(msg,lang){
               msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
 
             msg_txt += "\n*" + item.ItemAttributes.Title + "*";
-            console.log(item.ItemAttributes);
+            //console.log(item.ItemAttributes);
 
             //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
             //msg_txt+="\n\n"+args.star+" ⭐️";
@@ -362,7 +380,7 @@ var fastSearchResult = function(msg,lang){
             itemObj.type = 'article';
             itemObj.id = 'id:' + (process.hrtime());
             itemObj.title = item.ItemAttributes.Title;
-            itemObj.description = desc;
+            itemObj.description = desc.substring(0,511);
             itemObj.message_text = msg_txt;
             if(item.SmallImage && item.SmallImage.URL)
               itemObj.thumb_url = item.SmallImage.URL;
@@ -376,10 +394,10 @@ var fastSearchResult = function(msg,lang){
           });
 
           //bot.sendMessage(msg.chat.id, item.MediumImage.URL)
-          console.log(msg)
+          //console.log(msg)
           bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 100});
         }else{
-          console.log("no item found")
+          //console.log("no item found")
         }
       })
     }
@@ -418,6 +436,10 @@ bot.on('inline_query', function (msg) {
       });
     });
   }
+});
+
+bot.on('chosen_inline_result', function (res) {
+  console.log("id: "+res.result_id+" from: "+res.from.id+" query:"+res.query)
 });
 
 
