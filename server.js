@@ -12,6 +12,9 @@ token=token.replace(/(\r\n|\n|\r)/gm,"");
 var awscred = fs.readFileSync("aws", "utf8");
 awscred = JSON.parse(awscred);
 
+var trad = fs.readFileSync("language.json", "utf8");
+trad = JSON.parse(trad);
+
 // Setup polling way
 var bot = new TelegramBot(token, {polling: true});
 
@@ -84,10 +87,14 @@ regions.forEach(function(o){
   regionsId.push(o.id);
 });
 
+var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
+
 var languagesList = "";
 regions.forEach(function(region){
   languagesList+="\n    *"+region.id+"* - "+region.name;
 });
+
+var dlang = "us";
 
 //CREATE DB AND TABLE
 var db = new sqlite3.Database('db/amaznbot.db');
@@ -106,17 +113,16 @@ var newUserAlert = function(msg){
   itemObj.parse_mode = 'Markdown';
   itemObj.type = 'article';
   itemObj.id = 'id:' + (process.hrtime());
-  var langChoice = '*Hi '+msg.from.first_name+'*, and welcome to amaznbot.'
-                  +'\n\n Click -> @amaznbot and *set your language*'
-                  +'\n    *Example:* _/lang it_ \n\n *Language:*\n'
+  var langChoice = '*'+trad[dlang].hi+msg.from.first_name+'*,'
+                  + trad[dlang].welcome
                   + languagesList;
-  itemObj.title = "Hi, "+msg.from.first_name+" please add a language @amaznbot";
-  itemObj.description = "Click here for instructions";
+  itemObj.title = trad[dlang].hi+", "+msg.from.first_name+" "+trad[dlang].addLang;
+  itemObj.description = trad[dlang].clickInstruction;
   itemObj.message_text = langChoice;
 
   itemsList.push(itemObj);
 
-  bot.answerInlineQuery(msg.id, itemsList);
+  bot.answerInlineQuery(msg.id, itemsList,{"cache_time" : 0});
 }
 
 
@@ -135,20 +141,20 @@ var provideResult = function(msg,row){
 
 
     if(msg.query.length<=0) {
-      console.log("ZERO")
+      console.log("ZERO SEARCH")
       var itemObj = {},
       itemsList = [];
       // RESULT
       itemObj.parse_mode = 'Markdown';
       itemObj.type = 'article';
       itemObj.id = 'id:' + (process.hrtime());
-      itemObj.title = "Please add a term"
-      itemObj.description = "I'm just here to remind you to add a default text";
-      itemObj.message_text = "Please add a default language";
+      itemObj.title = msg.from.first_name+", "+trad[row.lang].queryZeroTitle;
+      itemObj.description = trad[row.lang].queryZeroDesc;
+      itemObj.message_text = trad[row.lang].queryZeroTxt;
 
       itemsList.push(itemObj);
 
-      bot.answerInlineQuery(msg.id, itemsList);
+      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 0});
     }else{
       prod.call("ItemSearch", {
         SearchIndex: "All",
@@ -163,19 +169,167 @@ var provideResult = function(msg,row){
 
             var itemObj = {};
             var keepaUrl = "https://dyn.keepa.com/pricehistory.png?asin=";
+            var keepaDomain = "&domain="+row.lang;
+            var gsmarena = "http://www.gsmarena.com/results.php3?sQuickSearch=yes&sName=";
+
+            var msg_txt = '';
+
+            if(item.LargeImage && item.LargeImage.URL)
+              msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
+
+            msg_txt += "\n*"+item.ItemAttributes.Title+"*";
+            msg_txt += " ▶️ [ Detail ]("+item.DetailPageURL+")";
+            //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
+            //msg_txt+="\n\n"+args.star+" ⭐️";
+            if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing) {
+              msg_txt += "\n\n*"+trad[row.lang].price+"*: " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
+              //console.log(prod.title+" - "+args.price.length)
+              if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
+                console.log("PRIME")
+                msg_txt += " - ✔️ Prime"
+              }
+              msg_txt += "\n  _" + item.Offers.Offer.OfferListing.Availability + "_";
+            }
+
+            msg_txt += "\n"
+            if (item.OfferSummary && item.OfferSummary.LowestNewPrice && item.OfferSummary.LowestNewPrice.Amount) {
+              msg_txt += "\n*"+trad[row.lang].new+":* " + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+            }
+            if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
+              msg_txt += "\n*"+trad[row.lang].used+":* " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
+            }
+            if(item.ItemAttributes.Feature){
+              msg_txt += "\n\n*Features*"
+              if(item.ItemAttributes.Feature.length>0){
+                for(var i=0;i<item.ItemAttributes.Feature.length;i++){
+                  msg_txt += "\n🔹"+item.ItemAttributes.Feature[i];
+                }
+              }
+            }
+
+            msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.asin+keepaDomain+")";
+            if(item.ItemAttributes.ProductTypeName=="PHONE"){
+              var gsma_query = msg.query;
+              gsma_query.replace(/\s/g, '&20');
+              msg_txt+="\n\n [‌‌GSMArena info]("+gsmarena+gsma_query+")"
+            }
+
+            ///// DESCRIPTION
+            var desc = "";
+            /*if (item.Offers && item.Offers.Offer != null && item.Offers.Offer.OfferListing != null) {
+              desc += trad[row.lang].price+": " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
+            }*/
+            if (item.OfferSummary && item.OfferSummary.LowestNewPrice)
+              desc += ""+trad[row.lang].new+":" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+            if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
+              desc += " - "+trad[row.lang].used+": " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
+            }
+            if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
+              desc += " - ✔️ Prime"
+            }
+
+            // RESULT
+            itemObj.parse_mode = 'Markdown';
+            itemObj.type = 'article';
+            itemObj.id = 'id:' + (process.hrtime());
+            itemObj.title = item.ItemAttributes.Title;
+            itemObj.description = desc;
+            itemObj.message_text = msg_txt;
+            if(item.SmallImage && item.SmallImage.URL)
+              itemObj.thumb_url = item.SmallImage.URL;
+            itemObj.thumb_width = 100;
+            itemObj.thumb_height = 100;
+            itemObj.disable_web_page_preview = false;
+
+            itemsList.push(itemObj);
+          });
+
+          //bot.sendMessage(msg.chat.id, item.MediumImage.URL)
+          console.log(msg)
+          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 10});
+        }else{
+          console.log("no item found")
+          console.log("ZERO SEARCH")
+          var itemObj = {},
+          itemsList = [];
+          // RESULT
+          itemObj.parse_mode = 'Markdown';
+          itemObj.type = 'article';
+          itemObj.id = 'id:' + (process.hrtime());
+          itemObj.title = "No results :-("//;msg.from.first_name+", "+trad[row.lang].queryZeroTitle;
+          itemObj.description = "I'm sorry but there are no results";//[row.lang].queryZeroDesc;
+          itemObj.message_text = 'No results';//trad[row.lang].queryZeroTxt;
+
+          itemsList.push(itemObj);
+          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 0});
+        }
+
+      });
+    }
+};
+
+var fastSearchResult = function(msg,lang){
+  console.log("fastSearchResult: "+msg.query+" - "+(msg.query.length>0))
+  var fin;
+  regions.forEach(function(o){if(o.id==lang){fin=o.code;}});
+
+  var options = {
+    host: "webservices.amazon."+fin,
+    version: "2011-08-01"
+  };
+
+  options.region=lang.toUpperCase();
+
+  var prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
+  console.log("FIN: "+"it")
+
+
+
+    if(msg.query.length<=0) {
+      console.log("ZERO")
+      var itemObj = {},
+      itemsList = [];
+      // RESULT
+      itemObj.parse_mode = 'Markdown';
+      itemObj.type = 'article';
+      itemObj.id = 'id:' + (process.hrtime());
+      itemObj.title = trad[lang].queryZeroTitle;
+      itemObj.description = trad[lang].queryZeroDesc;
+      itemObj.message_text = trad[lang].queryZeroTxt;
+
+      itemsList.push(itemObj);
+
+      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 10});
+    }else{
+      console.log("calling product search")
+      prod.call("ItemSearch", {
+        SearchIndex: "All",
+        Keywords: msg.query,
+        ResponseGroup: "Offers,ItemAttributes,Images,Reviews"
+      }, function (err, result) {
+        console.log("result")
+        if(result && result.Items && result.Items.Item && result.Items.Item.length>0){
+
+          var itemsList = [];
+          //console.log(JSON.stringify(result));
+          result.Items.Item.forEach(function (item) {
+
+            var itemObj = {};
+            var keepaUrl = "https://dyn.keepa.com/pricehistory.png?asin=";
             var keepaDomain = "&domain=it";
 
             var msg_txt = '';
-            if (item.CustomerReviews != null && item.CustomerReviews.IFrameURL)
-              msg_txt += "[ test ](" + item.CustomerReviews.IFrameURL + ") ";
-            else
+
+            if(item.LargeImage && item.LargeImage.URL)
               msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
 
             msg_txt += "\n*" + item.ItemAttributes.Title + "*";
+            console.log(item.ItemAttributes);
+
             //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
             //msg_txt+="\n\n"+args.star+" ⭐️";
-            if (item.Offers != null && item.Offers.Offer != null && item.Offers.Offer.OfferListing != null) {
-              msg_txt += "\n\n*Price*: " + item.Offers.Offer.OfferListing.Price.FormattedPrice + " - ";
+            if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.Price) {
+              msg_txt += "\n\n*"+trad[lang].price+"*: " + item.Offers.Offer.OfferListing.Price.FormattedPrice + " - ";
               //console.log(prod.title+" - "+args.price.length)
               msg_txt += "_" + item.Offers.Offer.OfferListing.Availability + "_";
             }
@@ -183,22 +337,22 @@ var provideResult = function(msg,row){
               msg_txt += " - ✔️Prime"
             }
 
-            if (item.OfferSummary.LowestNewPrice != null && item.OfferSummary.LowestNewPrice.Amount != 0) {
-              msg_txt += "\n  *New:* " + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+            if (item.OfferSummary && item.OfferSummary.LowestNewPrice && item.OfferSummary.LowestNewPrice.Amount) {
+              msg_txt += "\n  *"+trad[lang].new+":* " + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
             }
-            if (item.OfferSummary.LowestUsedPrice != null && item.OfferSummary.LowestUsedPrice.Amount != 0) {
-              msg_txt += "\n  *Used:* " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
+            if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
+              msg_txt += "\n  *"+trad[lang].used+":* " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
             }
 
             //msg_txt+="\n\n\[‌‌Price tracking by Keepa]("+keepaUrl+item.asin+keepaDomain+")";
 
-            // description
+            ///// DESCRIPTION
             var desc = "";
-            if (item.Offers.Offer != null && item.Offers.Offer.OfferListing != null) {
-              desc += "Price: " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
+            if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing ) {
+              desc += trad[lang].price+": " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
             }
-            if (item.OfferSummary.LowestNewPrice != null)
-              desc += " - New:" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+            if (item.OfferSummary && item.OfferSummary.LowestNewPrice)
+              desc += " - "+trad[lang].new+":" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
             if (item.IsEligibleForPrime == 1) {
               desc += " - ✔️Prime"
             }
@@ -210,7 +364,10 @@ var provideResult = function(msg,row){
             itemObj.title = item.ItemAttributes.Title;
             itemObj.description = desc;
             itemObj.message_text = msg_txt;
-            itemObj.thumb_url = item.SmallImage.URL;
+            if(item.SmallImage && item.SmallImage.URL)
+              itemObj.thumb_url = item.SmallImage.URL;
+            else
+              itemObj.thumb_url = "";
             itemObj.thumb_width = 100;
             itemObj.thumb_height = 100;
             itemObj.disable_web_page_preview = false;
@@ -220,7 +377,9 @@ var provideResult = function(msg,row){
 
           //bot.sendMessage(msg.chat.id, item.MediumImage.URL)
           console.log(msg)
-          bot.answerInlineQuery(msg.id, itemsList);
+          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 100});
+        }else{
+          console.log("no item found")
         }
       })
     }
@@ -239,17 +398,26 @@ bot.on('inline_query', function (msg) {
      */
   console.log("inline_query: "+msg.query+" - "+msg.query.length+" from: "+msg.from.id)
 
-  db.serialize(function() {
-    db.get("SELECT user_id,lang FROM users WHERE user_id=?",msg.from.id, function(err, row) {
-      // the user is new
-      if(row==undefined){
-        newUserAlert(msg);
-      }else{
-        // if exists go and does the search then gives back the results
-        provideResult(msg,row)
-      }
+  // Check if the query is a fast search
+  var re_res = reFastSearch.exec(msg.query);
+  if(re_res){ //it's a fast search
+    console.log("lang: "+re_res[1]+" - search: "+re_res[2]);
+    msg.query = re_res[2];
+    fastSearchResult(msg,re_res[1])
+  }else{
+    console.log("Not fast search");
+    db.serialize(function() {
+      db.get("SELECT user_id,lang FROM users WHERE user_id=?",msg.from.id, function(err, row) {
+        // the user is new
+        if(row==undefined){
+          newUserAlert(msg);
+        }else{
+          // if exists go and does the search then gives back the results
+          provideResult(msg,row)
+        }
+      });
     });
-  });
+  }
 });
 
 
@@ -258,25 +426,26 @@ bot.on('inline_query', function (msg) {
  ********************/
 
 bot.onText(/\/lang (.+)/, function (msg, match) {
-  var fromId = msg.from.id;
+  var fromId = msg.chat.id;
   if(regionsId.indexOf(match[1])>-1){
-    setLang(msg.from.id, match[1])
+    setLang(msg, match[1])
   }else{
     bot.sendMessage(fromId, "*Language NOT present* 😞, choose from:\n"+ languagesList, {"parse_mode":"Markdown"});
   }
 });
 
 bot.onText(/\/help/, function (msg, match) {
-  var fromId = msg.from.id;
+  var fromId = msg.chat.id;
   bot.sendMessage(fromId, "*How to use @amaznbot* \n TBD", {"parse_mode":"Markdown"});
 });
 
 bot.onText(/\/about/, function (msg, match) {
-  var fromId = msg.from.id;
+  var fromId = msg.chat.id;
   bot.sendMessage(fromId, "*Made with* <3 by two humans ", {"parse_mode":"Markdown"});
 });
 
-var setLang = function(userid, lang){
+var setLang = function(msg, lang){
+  var userid = msg.from.id;
   console.log(userid, "user: "+userid+" lang: "+lang);
   //var stmt = db.prepare();
   db.run("INSERT INTO users VALUES ($id,$lang)", {
@@ -288,9 +457,7 @@ var setLang = function(userid, lang){
         $id: userid,
         $lang: lang
       });
-    }else{
-      console.log("User info inserted")
     }
+    bot.sendMessage(msg.chat.id, trad[lang].langSelected+" "+lang, {"parse_mode":"Markdown"});
   });
-  //stmt.finalize();
 }

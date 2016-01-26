@@ -1,0 +1,83 @@
+{
+  "it" :
+    {
+      "hi" : "Ciao",
+      "welcome" : ", benvenuto su amaznbot.\n\nClick -> @amaznbot e *imposta la lingua* \n    *Esempio:* _/lang it_ \n\n *Lingue disponibili:*\n",
+      "addLang" : "Per favore aggiungi una lingua @amaznbot",
+      "clickInstruction" : "Fai clik qui per le istruzioni o invia /help ad @amaznbot ",
+      "queryZeroTitle" : "Digita quello che vuoi cercare",
+      "queryZeroDesc"  : "Puoi cercare quello che vuoi 'pc','fotocamere'",
+      "queryZeroTxt"   : "Non hai digitato niente 😅",
+      "price" : "Prezzo",
+      "new"   : "Nuovo",
+      "used"  : "Usato",
+      "madeWith" : "Fatto con",
+      "madeWith2" : "da due esseri umani",
+      "langSelected" : "Hai impostato la lingua su: "
+    },
+  "us" :
+    {
+      "hi" : "Hi",
+      "welcome" : ", and welcome to amaznbot.\n\nClick -> @amaznbot and *set your language* \n    *Example:* _/lang it_ \n\n *Language:*\n",
+      "addLang" : "Please add a language @amaznbot",
+      "clickInstruction" : "Click here for instructions or send /help to @amaznbot ",
+      "queryZeroTitle" : "Please write a search term",
+      "queryZeroDesc"  : "You can search for whatever you want 'pc','camera'",
+      "queryZeroTxt"   : "No search term provided 😅",
+      "price" : "Price",
+      "new"   : "New",
+      "used"  : "Used",
+      "madeWith" : "Made with",
+      "madeWith2" : "by two human being",
+      "langSelected" : "Language set to: "
+    },
+  "uk" :
+    {
+      "hi" : "Hi",
+      "welcome" : ", and welcome to amaznbot.\n\nClick -> @amaznbot and *set your language* \n    *Example:* _/lang it_ \n\n *Language:*\n",
+      "addLang" : "Please add a language @amaznbot",
+      "clickInstruction" : "Click here for instructions or send /help to @amaznbot ",
+      "queryZeroTitle" : "Please write a search term",
+      "queryZeroDesc"  : "You can search for whatever you want 'pc','camera'",
+      "queryZeroTxt"   : "No search term provided 😅",
+      "price" : "Price",
+      "new"   : "New",
+      "used"  : "Used",
+      "madeWith" : "Made with",
+      "madeWith2" : "by two human being",
+      "langSelected" : "Language set to: "
+    },
+    "br" :
+      {
+        "hi" : "Hi",
+        "welcome" : ", and welcome to amaznbot.\n\nClick -> @amaznbot and *set your language* \n    *Example:* _/lang it_ \n\n *Language:*\n",
+        "addLang" : "Please add a language @amaznbot",
+        "clickInstruction" : "Click here for instructions or send /help to @amaznbot ",
+        "queryZeroTitle" : "Please write a search term",
+        "queryZeroDesc"  : "You can search for whatever you want 'pc','camera'",
+        "queryZeroTxt"   : "No search term provided 😅",
+        "price" : "Price",
+        "new"   : "New",
+        "used"  : "Used",
+        "madeWith" : "Made with",
+        "madeWith2" : "by two human being",
+        "langSelected" : "Language set to: "
+      },
+    "es" :
+      {
+        "hi" : "Hi",
+        "welcome" : ", and welcome to amaznbot.\n\nClick -> @amaznbot and *set your language* \n    *Example:* _/lang it_ \n\n *Language:*\n",
+        "addLang" : "Please add a language @amaznbot",
+        "clickInstruction" : "Click here for instructions or send /help to @amaznbot ",
+        "queryZeroTitle" : "Please write a search term",
+        "queryZeroDesc"  : "You can search for whatever you want 'pc','camera'",
+        "queryZeroTxt"   : "No search term provided 😅",
+        "price" : "Price",
+        "new"   : "New",
+        "used"  : "Used",
+        "madeWith" : "Made with",
+        "madeWith2" : "by two human being",
+        "langSelected" : "Language set to: "
+      }
+
+}
