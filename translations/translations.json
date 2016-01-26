@@ -11,25 +11,41 @@
       "price" : "Prezzo",
       "new"   : "Nuovo",
       "used"  : "Usato",
+      "detail" : "Detail",
+      "review" : "Reviews",
       "madeWith" : "Fatto con",
       "madeWith2" : "da due esseri umani",
-      "langSelected" : "Hai impostato la lingua su: "
+      "langSelected" : "Hai impostato la lingua su: ",
+      "noResultTitle": "Nothing to show you",
+      "noResultDesc" : "I'm sorry but there are no results, try something else",
+      "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+      "defaultLocale" : "US is now your default language",
+      "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+      "howTo" : "*How to use @amaznbot* \n"
     },
   "us" :
     {
       "hi" : "Hi",
       "welcome" : ", and welcome to amaznbot.\n\nClick -> @amaznbot and *set your language* \n    *Example:* _/lang it_ \n\n *Language:*\n",
-      "addLang" : "Please add a language @amaznbot",
-      "clickInstruction" : "Click here for instructions or send /help to @amaznbot ",
+      "addLang" : "Please add a language",
+      "clickInstruction" : "Send .loc locale, ex:'.loc it'  - Send /help to @amaznbot if something is not clear ",
       "queryZeroTitle" : "Please write a search term",
       "queryZeroDesc"  : "You can search for whatever you want 'pc','camera'",
       "queryZeroTxt"   : "No search term provided 😅",
       "price" : "Price",
       "new"   : "New",
       "used"  : "Used",
+      "detail" : "Detail",
+      "review" : "Reviews",
       "madeWith" : "Made with",
       "madeWith2" : "by two human being",
-      "langSelected" : "Language set to: "
+      "langSelected" : "Locale set to US 🇺🇸",
+      "noResultTitle": "Nothing to show you",
+      "noResultDesc" : "I'm sorry but there are no results, try something else",
+      "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+      "defaultLocale" : "US is now your default locale",
+      "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+      "howTo" : "*How to use @amaznbot* \n"
     },
   "ca" :
   {
@@ -45,7 +61,13 @@
     "used"  : "Used",
     "madeWith" : "Made with",
     "madeWith2" : "by two human being",
-    "langSelected" : "Language set to: "
+    "langSelected" : "Language set to: ",
+    "noResultTitle": "Nothing to show you",
+    "noResultDesc" : "I'm sorry but there are no results, try something else",
+    "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+    "defaultLocale" : "US is now your default language",
+    "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+    "howTo" : "*How to use @amaznbot* \n"
   },
   "uk" :
     {
@@ -61,7 +83,13 @@
       "used"  : "Used",
       "madeWith" : "Made with",
       "madeWith2" : "by two human being",
-      "langSelected" : "Language set to: "
+      "langSelected" : "Language set to: ",
+      "noResultTitle": "Nothing to show you",
+      "noResultDesc" : "I'm sorry but there are no results, try something else",
+      "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+      "defaultLocale" : "US is now your default language",
+      "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+      "howTo" : "*How to use @amaznbot* \n"
     },
     "br" :
       {
@@ -77,7 +105,13 @@
         "used"  : "Carros",
         "madeWith" : "Feito com",
         "madeWith2" : "por dois ser humano",
-        "langSelected" : "Idioma definido como: "
+        "langSelected" : "Idioma definido como: ",
+        "noResultTitle": "Nothing to show you",
+        "noResultDesc" : "I'm sorry but there are no results, try something else",
+        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+        "defaultLocale" : "US is now your default language",
+        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+        "howTo" : "*How to use @amaznbot* \n"
       },
     "es" :
       {
@@ -93,7 +127,13 @@
         "used"  : "Usado",
         "madeWith" : "Hecho con",
         "madeWith2" : "por ser humano de dos",
-        "langSelected" : "Idioma septiembre a: "
+        "langSelected" : "Idioma septiembre a: ",
+        "noResultTitle": "Nothing to show you",
+        "noResultDesc" : "I'm sorry but there are no results, try something else",
+        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+        "defaultLocale" : "US is now your default language",
+        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+        "howTo" : "*How to use @amaznbot* \n"
       },
       "mx" :
       {
@@ -109,7 +149,13 @@
         "used"  : "Usado",
         "madeWith" : "Hecho con",
         "madeWith2" : "por ser humano de dos",
-        "langSelected" : "Idioma septiembre a: "
+        "langSelected" : "Idioma septiembre a: ",
+        "noResultTitle": "Nothing to show you",
+        "noResultDesc" : "I'm sorry but there are no results, try something else",
+        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+        "defaultLocale" : "US is now your default language",
+        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+        "howTo" : "*How to use @amaznbot* \n"
       },
       "fr" :
       {
@@ -125,7 +171,13 @@
         "used"  : "D'occasion",
         "madeWith" : "Made avec",
         "madeWith2" : "par deux être humain",
-        "langSelected" : "Langue réglé: "
+        "langSelected" : "Langue réglé: ",
+        "noResultTitle": "Nothing to show you",
+        "noResultDesc" : "I'm sorry but there are no results, try something else",
+        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+        "defaultLocale" : "US is now your default language",
+        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+        "howTo" : "*How to use @amaznbot* \n"
       },
 
       "de" :
@@ -142,7 +194,13 @@
         "used"  : "Barten",
         "madeWith" : "Gemacht mit",
         "madeWith2" : "Von zwei Menschen",
-        "langSelected" : "Sprache einstellen: "
+        "langSelected" : "Sprache einstellen: ",
+        "noResultTitle": "Nothing to show you",
+        "noResultDesc" : "I'm sorry but there are no results, try something else",
+        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+        "defaultLocale" : "US is now your default language",
+        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+        "howTo" : "*How to use @amaznbot* \n"
       },
       "cn" :
         {
@@ -158,7 +216,13 @@
           "used"  : "拿来主义",
           "madeWith" : "两个人",
           "madeWith2" : "语言设置为",
-          "langSelected" : "与制造: "
+          "langSelected" : "与制造: ",
+          "noResultTitle": "Nothing to show you",
+          "noResultDesc" : "I'm sorry but there are no results, try something else",
+          "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+          "defaultLocale" : "US is now your default language",
+          "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+          "howTo" : "*How to use @amaznbot* \n"
         },
       "jp" :
       {
@@ -174,7 +238,13 @@
         "used"  : "Used",
         "madeWith" : "Made with",
         "madeWith2" : "by two human being",
-        "langSelected" : "Language set to: "
+        "langSelected" : "Language set to: ",
+        "noResultTitle": "Nothing to show you",
+        "noResultDesc" : "I'm sorry but there are no results, try something else",
+        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+        "defaultLocale" : "US is now your default language",
+        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+        "howTo" : "*How to use @amaznbot* \n"
       },
       "in" :
       {
@@ -190,7 +260,13 @@
         "used"  : "Used",
         "madeWith" : "Made with",
         "madeWith2" : "by two human being",
-        "langSelected" : "Language set to: "
+        "langSelected" : "Language set to: ",
+        "noResultTitle": "Nothing to show you",
+        "noResultDesc" : "I'm sorry but there are no results, try something else",
+        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
+        "defaultLocale" : "US is now your default language",
+        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
+        "howTo" : "*How to use @amaznbot* \n"
       }
 
 }

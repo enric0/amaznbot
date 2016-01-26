@@ -87,7 +87,6 @@ regions.forEach(function(o){
   regionsId.push(o.id);
 });
 
-var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
 
 var languagesList = "";
 regions.forEach(function(region){
@@ -115,11 +114,12 @@ console.log('AMAZON BOT Starded');
 var newUserAlert = function(msg){
   var itemObj = {},
   itemsList = [];
+  console.log("newUserAlert")
   // RESULT User not defined
   itemObj.parse_mode = 'Markdown';
   itemObj.type = 'article';
   itemObj.id = 'id:' + (process.hrtime());
-  var langChoice = '*'+trad[dlang].hi+msg.from.first_name+'*,'
+  var langChoice = '*'+trad[dlang].hi+' '+msg.from.first_name+'*'
                   + trad[dlang].welcome
                   + languagesList;
   itemObj.title = trad[dlang].hi+", "+msg.from.first_name+" "+trad[dlang].addLang;
@@ -171,7 +171,7 @@ var provideResult = function(msg,row){
 
       itemsList.push(itemObj);
 
-      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 600,  "is_personal":true});
+      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : /*60*/0,  "is_personal":true});
     }else{
       prod.call("ItemSearch", {
         SearchIndex: "All",
@@ -195,9 +195,9 @@ var provideResult = function(msg,row){
               msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
 
             msg_txt += "\n*"+item.ItemAttributes.Title+"*";
-            msg_txt += "\n▶️ [ Detail ]("+item.DetailPageURL+")";
+            msg_txt += "\n▶️ [ "+trad[row.lang].detail+" ]("+item.DetailPageURL+")";
             if(item.CustomerReviews && item.CustomerReviews.IFrameURL)
-              msg_txt += "\n⭐️[ Reviews ]("+item.DetailPageURL+")";
+              msg_txt += "\n⭐️[ "+trad[row.lang].review+" ]("+item.DetailPageURL+")";
             //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
             //msg_txt+="\n\n"+args.star+" ⭐️";
             if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing) {
@@ -228,11 +228,11 @@ var provideResult = function(msg,row){
                 }
               }
             }
-            feature_txt = feature_txt.substring(0,150);
+            feature_txt = feature_txt.substring(0,175);
             feature_txt+="\n ...";
-            console.log("feature.length: "+feature_txt.length);
+            //console.log("feature.length: "+feature_txt.length);
 
-            msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.ASIN+keepaDomain+")";
+            //msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.ASIN+keepaDomain+")";
             /*if(item.ItemAttributes.ProductTypeName=="PHONE"){
               var gsma_query = msg.query;
               gsma_query.replace(/\s/g, '+');
@@ -259,13 +259,13 @@ var provideResult = function(msg,row){
             itemObj.id = 'id:' + (process.hrtime());
             itemObj.title = item.ItemAttributes.Title;
             itemObj.description = desc;
-            console.log("desc.length: "+desc.length)
+            //console.log("desc.length: "+desc.length)
             //itemObj.url = item.DetailPageURL;
             var txt=msg_txt;
             txt+=feature_txt;
             itemObj.message_text = txt;
-            console.log(txt);
-            console.log("txt.length: "+txt.length)
+            //console.log(txt);
+            //console.log("txt.length: "+txt.length)
 
             if(item.SmallImage && item.SmallImage.URL)
               itemObj.thumb_url = item.SmallImage.URL;
@@ -284,26 +284,25 @@ var provideResult = function(msg,row){
           });
           //bot.sendMessage(msg.chat.id, item.MediumImage.URL)
           //console.log(msg)
-          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 30,  "is_personal":true});
+          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : /*3*/0,  "is_personal":true});
           //Save query
 
 
         }else{
           console.log("no item found")
-          console.log("ZERO SEARCH")
           var itemObj = {},
           itemsList = [];
           // RESULT
           itemObj.parse_mode = 'Markdown';
           itemObj.type = 'article';
           itemObj.id = 'id:' + (process.hrtime());
-          itemObj.title = "No results 😔"//;msg.from.first_name+", "+trad[row.lang].queryZeroTitle;
-          itemObj.description = "I'm sorry but there are no results";//[row.lang].queryZeroDesc;
-          itemObj.message_text = 'No results';//trad[row.lang].queryZeroTxt;
+          itemObj.title = trad[row.lang].noResultTitle+" 😔"//;msg.from.first_name+", "+trad[row.lang].queryZeroTitle;
+          itemObj.description = trad[row.lang].noResultDesc;//[row.lang].queryZeroDesc;
+          itemObj.message_text = trad[row.lang].noResultDesc;//trad[row.lang].queryZeroTxt;
 
 
           itemsList.push(itemObj);
-          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 600,  "is_personal":true});
+          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 0/*600*/,  "is_personal":true});
 
         }
 
@@ -331,10 +330,6 @@ var fastSearchResult = function(msg,lang){
     if(msg.query.length<=0) {
       console.log("ZERO")
 
-
-
-
-
       var itemObj = {},
       itemsList = [];
       // RESULT
@@ -347,7 +342,7 @@ var fastSearchResult = function(msg,lang){
 
       itemsList.push(itemObj);
 
-      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 10});
+      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 0});
     }else{
       //console.log("calling product search")
       prod.call("ItemSearch", {
@@ -425,7 +420,7 @@ var fastSearchResult = function(msg,lang){
 
           //bot.sendMessage(msg.chat.id, item.MediumImage.URL)
           //console.log(msg)
-          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 100});
+          bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : /*10*/0});
 
 
         }else{
@@ -440,6 +435,10 @@ var fastSearchResult = function(msg,lang){
 /********************
  *      INLINE      *
  ********************/
+
+ var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
+ var reFastLoc = /^\.loc\s(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)/;
+
 
 bot.on('inline_query', function (msg) {
   /***************************** HOW IT WORKS *****************************
@@ -456,18 +455,25 @@ bot.on('inline_query', function (msg) {
     msg.query = re_res[2];
     fastSearchResult(msg,re_res[1])
   }else{
-    console.log("Not fast search");
-    db.serialize(function() {
-      db.get("SELECT user_id,lang FROM users WHERE user_id=?",msg.from.id, function(err, row) {
-        // the user is new
-        if(row==undefined){
-          newUserAlert(msg);
-        }else{
-          // if exists go and does the search then gives back the results
-          provideResult(msg,row)
-        }
+    var re_loc = reFastLoc.exec(msg.query);
+    console.log(re_loc)
+    if(re_loc){
+      console.log("Changing loc")
+      setLang(msg,re_loc[1],true)
+    }else{
+      console.log("Not changing");
+      db.serialize(function() {
+        db.get("SELECT user_id,lang FROM users WHERE user_id=?",msg.from.id, function(err, row) {
+          // the user is new
+          if(row==undefined){
+            newUserAlert(msg);
+          }else{
+            // if exists go and does the search then gives back the results
+            provideResult(msg,row)
+          }
+        });
       });
-    });
+    }
   }
 });
 
@@ -480,7 +486,7 @@ bot.on('chosen_inline_result', function (res) {
  *     SETTINGS     *
  ********************/
 
-bot.onText(/\/lang (.+)/, function (msg, match) {
+bot.onText(/\/locale (.+)/, function (msg, match) {
   var fromId = msg.chat.id;
   if(regionsId.indexOf(match[1])>-1){
     setLang(msg, match[1])
@@ -491,7 +497,17 @@ bot.onText(/\/lang (.+)/, function (msg, match) {
 
 bot.onText(/\/help/, function (msg, match) {
   var fromId = msg.chat.id;
-  bot.sendMessage(fromId, "*How to use @amaznbot* \n TBD", {"parse_mode":"Markdown"});
+  db.serialize(function() {
+    db.get("SELECT user_id,lang FROM users WHERE user_id=?",msg.from.id, function(err, row) {
+      // the user is new
+      if(row==undefined){
+        bot.sendMessage(fromId, trad[dlang].howTo, {"parse_mode":"Markdown"});
+      }else{
+        // if exists go and does the search then gives back the results
+        bot.sendMessage(fromId, trad[row.lang].howTo, {"parse_mode":"Markdown"});
+      }
+    });
+  });
 });
 
 bot.onText(/\/about/, function (msg, match) {
@@ -500,9 +516,9 @@ bot.onText(/\/about/, function (msg, match) {
 });
 
 
-var setLang = function(msg, lang){
+var setLang = function(msg, lang, inline){
   var userid = msg.from.id;
-  console.log(userid, "user: "+userid+" lang: "+lang);
+  console.log("user: "+userid+" lang: "+lang);
   //var stmt = db.prepare();
   db.run("INSERT INTO users VALUES ($id,$lang)", {
     $id: userid,
@@ -514,6 +530,22 @@ var setLang = function(msg, lang){
         $lang: lang
       });
     }
-    bot.sendMessage(msg.chat.id, trad[lang].langSelected+" "+lang, {"parse_mode":"Markdown"});
+    if(!inline) // if inline there's no msg.chat.id, it retrurns results
+      bot.sendMessage(msg.chat.id, trad[lang].langSelected+" "+lang, {"parse_mode":"Markdown"});
+    else {
+      var itemObj={},itemsList=[];
+      // RESULT
+      itemObj.parse_mode = 'Markdown';
+      itemObj.type = 'article';
+      itemObj.id = 'id:' + (process.hrtime());
+      itemObj.title = trad[lang].langSelected;
+      itemObj.description = trad[lang].defaultLocale;
+      itemObj.message_text = trad[lang].defaultLocaleTxtInline;
+
+      itemsList.push(itemObj);
+
+      bot.answerInlineQuery(msg.id, itemsList, {"parse_mode":"Markdown", "cache_time" : 0});
+
+    }
   });
 }
