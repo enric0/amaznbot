@@ -112,23 +112,23 @@ console.log('AMAZON BOT Starded');
  * @desc this function send msg to answerInlineQuery for lang choice
  */
 var newUserAlert = function(msg){
-  var itemObj = {},
-  itemsList = [];
+  var itemsList = [];
   console.log("newUserAlert")
   // RESULT User not defined
-  itemObj.parse_mode = 'Markdown';
-  itemObj.type = 'article';
-  itemObj.id = 'id:' + (process.hrtime());
-  var langChoice = '*'+trad[dlang].hi+' '+msg.from.first_name+'*'
-                  + trad[dlang].welcome
-                  + languagesList;
-  itemObj.title = trad[dlang].hi+", "+msg.from.first_name+" "+trad[dlang].addLang;
-  itemObj.description = trad[dlang].clickInstruction;
-  itemObj.message_text = langChoice;
+  regionsId.forEach(function(region){
+    var itemObj = {};
+    itemObj.parse_mode = 'Markdown';
+    itemObj.type = 'article';
+    itemObj.id = region;
+    itemObj.title = trad[region].setLocTitle;
+    itemObj.description = trad[region].setLocDesc;
+    itemObj.message_text = trad[region].hi+' '+msg.from.first_name+' '+trad[region].welcome+languagesList;
 
-  itemsList.push(itemObj);
+    itemsList.push(itemObj);
+  });
 
-  bot.answerInlineQuery(msg.id, itemsList,{"cache_time" : 0, "is_personal":true});
+
+  bot.answerInlineQuery(msg.id, itemsList,{"cache_time" : 300, "is_personal":true});
 }
 
 
@@ -171,7 +171,7 @@ var provideResult = function(msg,row){
 
       itemsList.push(itemObj);
 
-      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : /*60*/0,  "is_personal":true});
+      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 6000,  "is_personal":true});
     }else{
       prod.call("ItemSearch", {
         SearchIndex: "All",
@@ -478,6 +478,8 @@ bot.on('inline_query', function (msg) {
 });
 
 bot.on('chosen_inline_result', function (res) {
+  if(languagesList.indexOf(res.result_id)>0)
+    setLoc(res,res.result_id);
   console.log("id: "+res.result_id+" from: "+res.from.id+" query:"+res.query);
 });
 
@@ -546,6 +548,21 @@ var setLang = function(msg, lang, inline){
 
       bot.answerInlineQuery(msg.id, itemsList, {"parse_mode":"Markdown", "cache_time" : 0});
 
+    }
+  });
+}
+
+var setLoc = function(res, lang){
+  var userid = res.from.id;
+  db.run("INSERT INTO users VALUES ($id,$lang)", {
+    $id: userid,
+    $lang: lang
+  }, function(err){
+    if(err){
+      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
+        $id: userid,
+        $lang: lang
+      });
     }
   });
 }
