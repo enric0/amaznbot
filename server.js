@@ -12,7 +12,7 @@ token=token.replace(/(\r\n|\n|\r)/gm,"");
 var awscred = fs.readFileSync("aws", "utf8");
 awscred = JSON.parse(awscred);
 
-var trad = fs.readFileSync("language.json", "utf8");
+var trad = fs.readFileSync("translations/translations.json", "utf8");
 trad = JSON.parse(trad);
 
 // Setup polling way
@@ -278,9 +278,16 @@ var provideResult = function(msg,row){
             itemsList.push(itemObj);
           });
 
+          db.run("INSERT INTO user_queries (user, query )VALUES ($user,$query)",{
+            $user: row.user_id,
+            $query: msg.query
+          });
           //bot.sendMessage(msg.chat.id, item.MediumImage.URL)
           //console.log(msg)
           bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 30,  "is_personal":true});
+          //Save query
+
+
         }else{
           console.log("no item found")
           console.log("ZERO SEARCH")
@@ -297,6 +304,7 @@ var provideResult = function(msg,row){
 
           itemsList.push(itemObj);
           bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 600,  "is_personal":true});
+
         }
 
       });
@@ -419,11 +427,7 @@ var fastSearchResult = function(msg,lang){
           //console.log(msg)
           bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 100});
 
-          //Save query
-          db.run("INSERT INTO user_queries (user, query )VALUES ($user,$query)",{
-            $user: row.user_id,
-            $query: msg.query
-          });
+
         }else{
           //console.log("no item found")
 
@@ -468,7 +472,7 @@ bot.on('inline_query', function (msg) {
 });
 
 bot.on('chosen_inline_result', function (res) {
-  console.log("id: "+res.result_id+" from: "+res.from.id+" query:"+res.query)
+  console.log("id: "+res.result_id+" from: "+res.from.id+" query:"+res.query);
 });
 
 
