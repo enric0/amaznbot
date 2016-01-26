@@ -100,12 +100,18 @@ var dlang = "us";
 var db = new sqlite3.Database('db/amaznbot.db');
 db.serialize(function() {
   db.run("CREATE TABLE IF NOT EXISTS users (user_id text primary key, lang text)");
+  db.run("CREATE TABLE IF NOT EXISTS user_queries (id INTEGER PRIMARY KEY   AUTOINCREMENT, user text references users(user_id), query text , ts DATETIME DEFAULT CURRENT_TIMESTAMP)");
 });
 
 
-console.log('BOT STARTED');
+console.log('AMAZON BOT Starded');
 
 
+/**
+ * @name function newUserAlert
+ * @param msg
+ * @desc this function send msg to answerInlineQuery for lang choice
+ */
 var newUserAlert = function(msg){
   var itemObj = {},
   itemsList = [];
@@ -126,6 +132,12 @@ var newUserAlert = function(msg){
 }
 
 
+/**
+ * @name function provideResult
+ * @param msg message that rappresent search key
+ * @param row rappresent result set
+ * @desc this function does a amazon search
+ * */
 var provideResult = function(msg,row){
   var fin = "";
   regions.forEach(function(o){if(o.id==row.lang){fin=o.code;}});
@@ -135,12 +147,17 @@ var provideResult = function(msg,row){
     version: "2011-08-01"
   };
 
+
+
+
+
+
   options.region=row.lang.toUpperCase();
 
   var prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
 
-
     if(msg.query.length<=0) {
+
       console.log("ZERO SEARCH")
       var itemObj = {},
       itemsList = [];
@@ -305,6 +322,11 @@ var fastSearchResult = function(msg,lang){
 
     if(msg.query.length<=0) {
       console.log("ZERO")
+
+
+
+
+
       var itemObj = {},
       itemsList = [];
       // RESULT
@@ -396,8 +418,15 @@ var fastSearchResult = function(msg,lang){
           //bot.sendMessage(msg.chat.id, item.MediumImage.URL)
           //console.log(msg)
           bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 100});
+
+          //Save query
+          db.run("INSERT INTO user_queries (user, query )VALUES ($user,$query)",{
+            $user: row.user_id,
+            $query: msg.query
+          });
         }else{
           //console.log("no item found")
+
         }
       })
     }
@@ -465,6 +494,7 @@ bot.onText(/\/about/, function (msg, match) {
   var fromId = msg.chat.id;
   bot.sendMessage(fromId, "*Made with* <3 by two humans ", {"parse_mode":"Markdown"});
 });
+
 
 var setLang = function(msg, lang){
   var userid = msg.from.id;
