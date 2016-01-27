@@ -1,4 +1,8 @@
 
+/********************
+ *     INIT         *
+ ********************/
+
 //REQUIRED MODULES
 var TelegramBot = require('node-telegram-bot-api');
 var fs = require('fs');
@@ -106,9 +110,123 @@ db.serialize(function() {
 console.log('AMAZON BOT Starded');
 
 
+
+/********************
+ *     FUNCTIONS     *
+ ********************/
+
+
+
+
+/**
+ * @name function getItemMsgTxt
+ * @param item object
+ * @desc
+ * @return String
+ */
+var getItemMsgTxt=function(item, row){
+
+  var msg_txt='';
+
+  //console.log(item);
+  if(item.LargeImage && item.LargeImage.URL)
+    msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
+
+  msg_txt += "\n*"+item.ItemAttributes.Title+"*";
+  msg_txt += "\n▶️ [ "+trad[row.lang].detail+" ]("+item.DetailPageURL+")";
+  if(item.CustomerReviews && item.CustomerReviews.IFrameURL)
+    msg_txt += "\n⭐️[ "+trad[row.lang].review+" ]("+item.DetailPageURL+")";
+  //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
+  //msg_txt+="\n\n"+args.star+" ⭐️";
+  if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing) {
+    msg_txt += "\n\n*"+trad[row.lang].price+"*: " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
+    //console.log(prod.title+" - "+args.price.length)
+    if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
+      //console.log("PRIME")
+      msg_txt += " - ✓Prime"
+    }
+    msg_txt += "\n  _" + item.Offers.Offer.OfferListing.Availability + "_";
+  }
+
+  //console.log(item.Offers);
+  msg_txt += "\n"
+  if (item.OfferSummary && item.OfferSummary.LowestNewPrice && item.OfferSummary.LowestNewPrice.Amount) {
+    msg_txt += "\n*"+trad[row.lang].new+":* " + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+  }
+  if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
+    msg_txt += "\n*"+trad[row.lang].used+":* " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
+  }
+
+  msg_txt= msg_txt.substring(0,msg_txt.lastIndexOf(')')+1)
+  return msg_txt;
+
+}
+
+/**
+ * @name function getItemFeatureTxt
+ * @param item object
+ * @desc
+ * @return String
+ */
+var getItemFeatureTxt=function(item,row){
+
+  var feature_txt='';
+  if(item.ItemAttributes.Feature){
+    feature_txt += "\n\n*Features*"
+    if(item.ItemAttributes.Feature.length>0){
+      for(var i=0;i<item.ItemAttributes.Feature.length;i++){
+        feature_txt += "\n🔹"+item.ItemAttributes.Feature[i];
+      }
+    }
+  }
+  feature_txt = feature_txt.substring(0,175);
+  feature_txt+="\n ...";
+
+
+
+  //console.log("feature.length: "+feature_txt.length);
+
+  //msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.ASIN+keepaDomain+")";
+  /*if(item.ItemAttributes.ProductTypeName=="PHONE"){
+   var gsma_query = msg.query;
+   gsma_query.replace(/\s/g, '+');
+   msg_txt+="\n\n [‌‌GSMArena info]("+gsmarena+gsma_query+")"
+   }*/
+
+  return feature_txt;
+
+}
+
+
+/**
+ * @name function getItemDesc
+ * @param item object
+ * @desc
+ * @return String
+ */
+var getItemDesc=function(item,row){
+  var desc='';
+  /*if (item.Offers && item.Offers.Offer != null && item.Offers.Offer.OfferListing != null) {
+   desc += trad[row.lang].price+": " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
+   }*/
+  if (item.OfferSummary && item.OfferSummary.LowestNewPrice)
+    desc += trad[row.lang].new+":" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+  if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
+    desc += " - "+trad[row.lang].used+": " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
+  }
+  if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
+    desc += " ✓Prime"
+  }
+
+  return desc;
+
+}
+
+
+
 /**
  * @name function newUserAlert
- * @param msg
+ * @param msg string
  * @desc this function send msg to answerInlineQuery for lang choice
  */
 var newUserAlert = function(msg){
@@ -132,6 +250,7 @@ var newUserAlert = function(msg){
 }
 
 
+
 /**
  * @name function provideResult
  * @param msg message that rappresent search key
@@ -146,11 +265,6 @@ var provideResult = function(msg,row){
     host: "webservices.amazon."+fin,
     version: "2011-08-01"
   };
-
-
-
-
-
 
   options.region=row.lang.toUpperCase();
 
@@ -171,7 +285,7 @@ var provideResult = function(msg,row){
 
       itemsList.push(itemObj);
 
-      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 6000,  "is_personal":true});
+      bot.answerInlineQuery(msg.id, itemsList, {"cache_time" : 30,  "is_personal":true});
     }else{
       prod.call("ItemSearch", {
         SearchIndex: "All",
@@ -185,92 +299,22 @@ var provideResult = function(msg,row){
           result.Items.Item.forEach(function (item) {
 
             var itemObj = {};
-            var keepaUrl = "https://dyn.keepa.com/pricehistory.png?asin=";
-            var keepaDomain = "&domain="+row.lang;
-            //var gsmarena = "http://www.gsmarena.com/results.php3?sQuickSearch=yes&sName=";
 
-            var msg_txt = '';
-            //console.log(item);
-            if(item.LargeImage && item.LargeImage.URL)
-              msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
-
-            msg_txt += "\n*"+item.ItemAttributes.Title+"*";
-            msg_txt += "\n▶️ [ "+trad[row.lang].detail+" ]("+item.DetailPageURL+")";
-            if(item.CustomerReviews && item.CustomerReviews.IFrameURL)
-              msg_txt += "\n⭐️[ "+trad[row.lang].review+" ]("+item.DetailPageURL+")";
-            //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
-            //msg_txt+="\n\n"+args.star+" ⭐️";
-            if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing) {
-              msg_txt += "\n\n*"+trad[row.lang].price+"*: " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
-              //console.log(prod.title+" - "+args.price.length)
-              if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
-                //console.log("PRIME")
-                msg_txt += " - ✓Prime"
-              }
-              msg_txt += "\n  _" + item.Offers.Offer.OfferListing.Availability + "_";
-            }
-
-            //console.log(item.Offers);
-            msg_txt += "\n"
-            if (item.OfferSummary && item.OfferSummary.LowestNewPrice && item.OfferSummary.LowestNewPrice.Amount) {
-              msg_txt += "\n*"+trad[row.lang].new+":* " + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
-            }
-            if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
-              msg_txt += "\n*"+trad[row.lang].used+":* " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
-            }
-
-            var feature_txt = '';
-            if(item.ItemAttributes.Feature){
-              feature_txt += "\n\n*Features*"
-              if(item.ItemAttributes.Feature.length>0){
-                for(var i=0;i<item.ItemAttributes.Feature.length;i++){
-                  if(item.ItemAttributes.Feature[i].length<2)
-                    feature_txt += item.ItemAttributes.Feature[i];
-                  else {
-                    feature_txt += "\n🔹"+item.ItemAttributes.Feature[i];
-                  }
-                }
-              }
-            }
-            feature_txt = feature_txt.substring(0,175);
-            feature_txt+=" ...";
-            //console.log("feature.length: "+feature_txt.length);
-
-            //msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.ASIN+keepaDomain+")";
-            /*if(item.ItemAttributes.ProductTypeName=="PHONE"){
-              var gsma_query = msg.query;
-              gsma_query.replace(/\s/g, '+');
-              msg_txt+="\n\n [‌‌GSMArena info]("+gsmarena+gsma_query+")"
-            }*/
-
-            ///// DESCRIPTION //////
-            var desc = "";
-            /*if (item.Offers && item.Offers.Offer != null && item.Offers.Offer.OfferListing != null) {
-              desc += trad[row.lang].price+": " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
-            }*/
-            if (item.OfferSummary && item.OfferSummary.LowestNewPrice)
-              desc += trad[row.lang].new+":" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
-            if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
-              desc += " - "+trad[row.lang].used+": " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
-            }
-            if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
-              desc += " ✓Prime"
-            }
+            ///// ITEM MSG TXT
+            var msg_txt=getItemMsgTxt(item,row),
+            ///// ITEM FEATURE TXT
+            feature_txt=getItemFeatureTxt(item,row),
+            ///// ITEM DESCRIPTION
+            desc=getItemDesc(item,row);
 
             // RESULT
             itemObj.parse_mode = 'Markdown';
             itemObj.type = 'article';
-            itemObj.id = 'id:' + (process.hrtime());
+            itemObj.id = 'id:'+msg.query.replace(' ','')+row.lang;
             itemObj.title = item.ItemAttributes.Title;
             itemObj.description = desc;
-            //console.log("desc.length: "+desc.length)
-            //itemObj.url = item.DetailPageURL;
-            var txt= msg_txt.substring(0,msg_txt.lastIndexOf(')')+1);
-            txt+=feature_txt;
-            itemObj.message_text = txt;
-            //console.log(txt);
-            //console.log("txt.length: "+txt.length)
-
+            itemObj.url = item.DetailPageURL;
+            itemObj.message_text = msg_txt+feature_txt;
             if(item.SmallImage && item.SmallImage.URL)
               itemObj.thumb_url = item.SmallImage.URL;
             itemObj.url = item.DetailPageURL;
@@ -314,6 +358,12 @@ var provideResult = function(msg,row){
     }
 };
 
+/**
+ * @name function fastSearchResult
+ * @param msg message of query
+ * @param lang language chose for the query
+ * @desc this function do a fast search by setting on the fly the lang
+ */
 var fastSearchResult = function(msg,lang){
   console.log("fastSearchResult: "+msg.query+" - "+(msg.query.length>0))
   var fin;
@@ -328,7 +378,6 @@ var fastSearchResult = function(msg,lang){
 
   var prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
   console.log("FIN: "+"it")
-
 
 
     if(msg.query.length<=0) {
@@ -435,13 +484,73 @@ var fastSearchResult = function(msg,lang){
     }
 };
 
+/**
+ * @name function setLang
+ * @param msg message of inline query
+ * @param lang language chosen to set as default
+ * @desc this function set the default language
+ */
+var setLang = function(msg, lang, inline){
+  var userid = msg.from.id;
+  console.log("user: "+userid+" lang: "+lang);
+  //var stmt = db.prepare();
+  db.run("INSERT INTO users VALUES ($id,$lang)", {
+    $id: userid,
+    $lang: lang
+  }, function(err){
+    if(err){
+      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
+        $id: userid,
+        $lang: lang
+      });
+    }
+    if(!inline) // if inline there's no msg.chat.id, it retrurns results
+      bot.sendMessage(msg.chat.id, trad[lang].langSelected+" "+lang, {"parse_mode":"Markdown"});
+    else {
+      var itemObj={},itemsList=[];
+      // RESULT
+      itemObj.parse_mode = 'Markdown';
+      itemObj.type = 'article';
+      itemObj.id = 'id:' + (process.hrtime());
+      itemObj.title = trad[lang].langSelected;
+      itemObj.description = trad[lang].defaultLocale;
+      itemObj.message_text = trad[lang].defaultLocaleTxtInline;
+
+      itemsList.push(itemObj);
+
+      bot.answerInlineQuery(msg.id, itemsList, {"parse_mode":"Markdown", "cache_time" : 0});
+
+    }
+  });
+}
+
+/**
+ * @name function setLoc
+ * @param res message of query
+ * @param lang language chose for the query
+ * @desc this function set the default language from chosen_inline_result
+ */
+var setLoc = function(res, lang){
+  var userid = res.from.id;
+  db.run("INSERT INTO users VALUES ($id,$lang)", {
+    $id: userid,
+    $lang: lang
+  }, function(err){
+    if(err){
+      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
+        $id: userid,
+        $lang: lang
+      });
+    }
+  });
+}
 
 /********************
  *      INLINE      *
  ********************/
 
- var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
- var reFastLoc = /^\.loc\s(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)/;
+var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
+var reFastLoc = /^\.loc\s(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)/;
 
 
 bot.on('inline_query', function (msg) {
@@ -487,7 +596,6 @@ bot.on('chosen_inline_result', function (res) {
   console.log("id: "+res.result_id+" from: "+res.from.id+" query:"+res.query);
 });
 
-
 /********************
  *     SETTINGS     *
  ********************/
@@ -520,53 +628,3 @@ bot.onText(/\/about/, function (msg, match) {
   var fromId = msg.chat.id;
   bot.sendMessage(fromId, "*Made with* <3 by two humans ", {"parse_mode":"Markdown"});
 });
-
-
-var setLang = function(msg, lang, inline){
-  var userid = msg.from.id;
-  console.log("user: "+userid+" lang: "+lang);
-  //var stmt = db.prepare();
-  db.run("INSERT INTO users VALUES ($id,$lang)", {
-    $id: userid,
-    $lang: lang
-  }, function(err){
-    if(err){
-      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
-        $id: userid,
-        $lang: lang
-      });
-    }
-    if(!inline) // if inline there's no msg.chat.id, it retrurns results
-      bot.sendMessage(msg.chat.id, trad[lang].langSelected+" "+lang, {"parse_mode":"Markdown"});
-    else {
-      var itemObj={},itemsList=[];
-      // RESULT
-      itemObj.parse_mode = 'Markdown';
-      itemObj.type = 'article';
-      itemObj.id = 'id:' + (process.hrtime());
-      itemObj.title = trad[lang].langSelected;
-      itemObj.description = trad[lang].defaultLocale;
-      itemObj.message_text = trad[lang].defaultLocaleTxtInline;
-
-      itemsList.push(itemObj);
-
-      bot.answerInlineQuery(msg.id, itemsList, {"parse_mode":"Markdown", "cache_time" : 0});
-
-    }
-  });
-}
-
-var setLoc = function(res, lang){
-  var userid = res.from.id;
-  db.run("INSERT INTO users VALUES ($id,$lang)", {
-    $id: userid,
-    $lang: lang
-  }, function(err){
-    if(err){
-      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
-        $id: userid,
-        $lang: lang
-      });
-    }
-  });
-}

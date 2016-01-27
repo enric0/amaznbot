@@ -116,12 +116,12 @@
         "madeWith" : "Feito com",
         "madeWith2" : "por dois ser humano",
         "langSelected" : "Idioma definido como: ",
-        "noResultTitle": "Nothing to show you",
-        "noResultDesc" : "I'm sorry but there are no results, try something else",
-        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
-        "defaultLocale" : "US is now your default language",
-        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-        "howTo" : "*How to use @amaznbot* \n"
+        "noResultTitle": "Nada para mostrar a você",
+        "noResultDesc" : "Sinto muito, mas não há resultados , tente outra coisa",
+        "noResultTxt" : " Eu procurei na Amazon via amaznbot mas eu não consegui encontrar nada ☹️",
+        "defaultLocale" : "US é agora o seu idioma padrão ",
+        "defaultLocaleTxtInline" : "Eu configurei US como localidade padrão em @amaznbot",
+        "howTo" : "*Como usar  @amaznbot* \n"
       },
     "es" :
       {
@@ -132,44 +132,44 @@
         "setLocDesc" : "Set Amazon Espana as default for searches",
         "clickInstruction" : "Haga clic aquí para obtener instrucciones o enviar /help para @amaznbot ",
         "queryZeroTitle" : "Por favor, escriba un término de búsqueda",
-        "queryZeroDesc"  : "Usted puede buscar lo que quieras 'PC', 'espacio'",
+        "queryZeroDesc"  : "Usted puede buscar lo que quieras 'PC', 'camara fotografica'",
         "queryZeroTxt"   : "Ningún término de búsqueda siempre 😅",
         "price" : "Precio",
         "new"   : "Nuevo",
         "used"  : "Usado",
         "madeWith" : "Hecho con",
         "madeWith2" : "por ser humano de dos",
-        "langSelected" : "Idioma septiembre a: ",
-        "noResultTitle": "Nothing to show you",
-        "noResultDesc" : "I'm sorry but there are no results, try something else",
-        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
-        "defaultLocale" : "US is now your default language",
-        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-        "howTo" : "*How to use @amaznbot* \n"
+        "langSelected" : "Idioma ajustado a: ",
+        "noResultTitle": "No hay nada que le muestre",
+        "noResultDesc" : "Lo siento, pero no hay resultados , intentar algo más",
+        "noResultTxt" : "He buscado en Amazon a través de amaznbot pero no pude encontrar nada ☹️",
+        "defaultLocale" : "US ahora es el idioma predeterminado",
+        "defaultLocaleTxtInline" : "He puesto US como por defecto en la configuración regional @amaznbot",
+        "howTo" : "*Cómo utilizar @amaznbot* \n"
       },
       "mx" :
       {
         "hi" : "¡Hola",
         "welcome" : ", y amazonbot bienvenidos.\n\nHaga clic -> @amaznbot y *establece el idioma* \n    *Ejemplo:* _/lang it_ \n\n *Lengua:*\n",
         "addLang" : "Por favor, añada una lengua @amaznbot",
-        "setLocTitle" : "MX Amazon.mx",
-        "setLocDesc" : "Set Amazon Mexico as default for searches",
+        "setLocTitle" : "MX Amazon.es",
+        "setLocDesc" : "Set Amazon Espana as default for searches",
         "clickInstruction" : "Haga clic aquí para obtener instrucciones o enviar /help para @amaznbot ",
         "queryZeroTitle" : "Por favor, escriba un término de búsqueda",
-        "queryZeroDesc"  : "Usted puede buscar lo que quieras 'PC', 'espacio'",
+        "queryZeroDesc"  : "Usted puede buscar lo que quieras 'PC', 'camara fotografica'",
         "queryZeroTxt"   : "Ningún término de búsqueda siempre 😅",
         "price" : "Precio",
         "new"   : "Nuevo",
         "used"  : "Usado",
         "madeWith" : "Hecho con",
         "madeWith2" : "por ser humano de dos",
-        "langSelected" : "Idioma septiembre a: ",
-        "noResultTitle": "Nothing to show you",
-        "noResultDesc" : "I'm sorry but there are no results, try something else",
-        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
-        "defaultLocale" : "US is now your default language",
-        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-        "howTo" : "*How to use @amaznbot* \n"
+        "langSelected" : "Idioma ajustado a: ",
+        "noResultTitle": "No hay nada que le muestre",
+        "noResultDesc" : "Lo siento, pero no hay resultados , intentar algo más",
+        "noResultTxt" : "He buscado en Amazon a través de amaznbot pero no pude encontrar nada ☹️",
+        "defaultLocale" : "US ahora es el idioma predeterminado",
+        "defaultLocaleTxtInline" : "He puesto US como por defecto en la configuración regional @amaznbot",
+        "howTo" : "*Cómo utilizar @amaznbot* \n"
       },
       "fr" :
       {
@@ -188,12 +188,12 @@
         "madeWith" : "Made avec",
         "madeWith2" : "par deux être humain",
         "langSelected" : "Langue réglé: ",
-        "noResultTitle": "Nothing to show you",
-        "noResultDesc" : "I'm sorry but there are no results, try something else",
-        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
-        "defaultLocale" : "US is now your default language",
-        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-        "howTo" : "*How to use @amaznbot* \n"
+        "noResultTitle": "Rien à vous montrer",
+        "noResultDesc" : "Je suis désolé mais il n'y a aucun résultat , essayez autre chose",
+        "noResultTxt" : "Je l'ai cherché sur Amazon via @amaznbot mais je ne pouvais pas trouver quoi que ce soit ☹️",
+        "defaultLocale" : "US est maintenant votre langue par défaut",
+        "defaultLocaleTxtInline" : "Je nous ai mis par défaut sur ​​les paramètres régionaux @amaznbot",
+        "howTo" : "*Comment utiliser @amaznbot* \n"
       },
 
       "de" :
@@ -213,12 +213,12 @@
         "madeWith" : "Gemacht mit",
         "madeWith2" : "Von zwei Menschen",
         "langSelected" : "Sprache einstellen: ",
-        "noResultTitle": "Nothing to show you",
-        "noResultDesc" : "I'm sorry but there are no results, try something else",
-        "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
-        "defaultLocale" : "US is now your default language",
-        "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-        "howTo" : "*How to use @amaznbot* \n"
+        "noResultTitle": "Nichts , Ihnen zu zeigen",
+        "noResultDesc" : "Es tut mir leid , aber es gibt keine Treffer , versuchen Sie etwas anderes",
+        "noResultTxt" : "Ich habe auf Amazon über @amaznbot gesucht , aber ich konnte nichts finden ☹️",
+        "defaultLocale" : "US ist jetzt Ihre Standardsprache",
+        "defaultLocaleTxtInline" : "Ich habe US als Standardgebietsschema auf @amaznbot eingestellt",
+        "howTo" : "*Wie zu verwenden @amaznbot* \n"
       },
       "cn" :
         {
@@ -237,12 +237,12 @@
           "madeWith" : "两个人",
           "madeWith2" : "语言设置为",
           "langSelected" : "与制造: ",
-          "noResultTitle": "Nothing to show you",
-          "noResultDesc" : "I'm sorry but there are no results, try something else",
-          "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
-          "defaultLocale" : "US is now your default language",
-          "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-          "howTo" : "*How to use @amaznbot* \n"
+          "noResultTitle": "没有告诉你",
+          "noResultDesc" : "我很抱歉，但没有结果，尝试别的东西",
+          "noResultTxt" : "我已经通过@amaznbot搜查亚马逊，但我无法找到任何东西 ☹️",
+          "defaultLocale" : "US 现在是默认语言",
+          "defaultLocaleTxtInline" : "我给自己定美国作为@amaznbot默认语言环境",
+          "howTo" : "*如何使用 @amaznbot* \n"
         },
       "jp" :
       {
