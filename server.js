@@ -1,4 +1,8 @@
 
+/********************
+ *     INIT         *
+ ********************/
+    
 //REQUIRED MODULES
 var TelegramBot = require('node-telegram-bot-api');
 var fs = require('fs');
@@ -106,6 +110,11 @@ db.serialize(function() {
 console.log('AMAZON BOT Starded');
 
 
+
+/********************
+ *     FUNCTIONS     *
+ ********************/
+
 /**
  * @name function newUserAlert
  * @param msg
@@ -146,11 +155,6 @@ var provideResult = function(msg,row){
     host: "webservices.amazon."+fin,
     version: "2011-08-01"
   };
-
-
-
-
-
 
   options.region=row.lang.toUpperCase();
 
@@ -310,6 +314,12 @@ var provideResult = function(msg,row){
     }
 };
 
+/**
+ * @name function fastSearchResult
+ * @param msg message of query
+ * @param lang language chose for the query
+ * @desc this function do a fast search by setting on the fly the lang
+ */
 var fastSearchResult = function(msg,lang){
   console.log("fastSearchResult: "+msg.query+" - "+(msg.query.length>0))
   var fin;
@@ -324,7 +334,6 @@ var fastSearchResult = function(msg,lang){
 
   var prod = aws.createProdAdvClient(awscred.keyid, awscred.key, awscred.tag, options);
   console.log("FIN: "+"it")
-
 
 
     if(msg.query.length<=0) {
@@ -431,13 +440,73 @@ var fastSearchResult = function(msg,lang){
     }
 };
 
+/**
+ * @name function setLang
+ * @param msg message of inline query
+ * @param lang language chosen to set as default
+ * @desc this function set the default language
+ */
+var setLang = function(msg, lang, inline){
+  var userid = msg.from.id;
+  console.log("user: "+userid+" lang: "+lang);
+  //var stmt = db.prepare();
+  db.run("INSERT INTO users VALUES ($id,$lang)", {
+    $id: userid,
+    $lang: lang
+  }, function(err){
+    if(err){
+      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
+        $id: userid,
+        $lang: lang
+      });
+    }
+    if(!inline) // if inline there's no msg.chat.id, it retrurns results
+      bot.sendMessage(msg.chat.id, trad[lang].langSelected+" "+lang, {"parse_mode":"Markdown"});
+    else {
+      var itemObj={},itemsList=[];
+      // RESULT
+      itemObj.parse_mode = 'Markdown';
+      itemObj.type = 'article';
+      itemObj.id = 'id:' + (process.hrtime());
+      itemObj.title = trad[lang].langSelected;
+      itemObj.description = trad[lang].defaultLocale;
+      itemObj.message_text = trad[lang].defaultLocaleTxtInline;
+
+      itemsList.push(itemObj);
+
+      bot.answerInlineQuery(msg.id, itemsList, {"parse_mode":"Markdown", "cache_time" : 0});
+
+    }
+  });
+}
+
+/**
+ * @name function setLoc
+ * @param res message of query
+ * @param lang language chose for the query
+ * @desc this function set the default language from chosen_inline_result
+ */
+var setLoc = function(res, lang){
+  var userid = res.from.id;
+  db.run("INSERT INTO users VALUES ($id,$lang)", {
+    $id: userid,
+    $lang: lang
+  }, function(err){
+    if(err){
+      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
+        $id: userid,
+        $lang: lang
+      });
+    }
+  });
+}
 
 /********************
  *      INLINE      *
  ********************/
 
- var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
- var reFastLoc = /^\.loc\s(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)/;
+var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
+var reFastLoc = /^\.loc\s(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)/;
 
 
 bot.on('inline_query', function (msg) {
@@ -483,7 +552,6 @@ bot.on('chosen_inline_result', function (res) {
   console.log("id: "+res.result_id+" from: "+res.from.id+" query:"+res.query);
 });
 
-
 /********************
  *     SETTINGS     *
  ********************/
@@ -516,53 +584,3 @@ bot.onText(/\/about/, function (msg, match) {
   var fromId = msg.chat.id;
   bot.sendMessage(fromId, "*Made with* <3 by two humans ", {"parse_mode":"Markdown"});
 });
-
-
-var setLang = function(msg, lang, inline){
-  var userid = msg.from.id;
-  console.log("user: "+userid+" lang: "+lang);
-  //var stmt = db.prepare();
-  db.run("INSERT INTO users VALUES ($id,$lang)", {
-    $id: userid,
-    $lang: lang
-  }, function(err){
-    if(err){
-      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
-        $id: userid,
-        $lang: lang
-      });
-    }
-    if(!inline) // if inline there's no msg.chat.id, it retrurns results
-      bot.sendMessage(msg.chat.id, trad[lang].langSelected+" "+lang, {"parse_mode":"Markdown"});
-    else {
-      var itemObj={},itemsList=[];
-      // RESULT
-      itemObj.parse_mode = 'Markdown';
-      itemObj.type = 'article';
-      itemObj.id = 'id:' + (process.hrtime());
-      itemObj.title = trad[lang].langSelected;
-      itemObj.description = trad[lang].defaultLocale;
-      itemObj.message_text = trad[lang].defaultLocaleTxtInline;
-
-      itemsList.push(itemObj);
-
-      bot.answerInlineQuery(msg.id, itemsList, {"parse_mode":"Markdown", "cache_time" : 0});
-
-    }
-  });
-}
-
-var setLoc = function(res, lang){
-  var userid = res.from.id;
-  db.run("INSERT INTO users VALUES ($id,$lang)", {
-    $id: userid,
-    $lang: lang
-  }, function(err){
-    if(err){
-      db.run("UPDATE users SET lang = $lang WHERE user_id = $id", {
-        $id: userid,
-        $lang: lang
-      });
-    }
-  });
-}
