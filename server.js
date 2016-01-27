@@ -224,12 +224,16 @@ var provideResult = function(msg,row){
               feature_txt += "\n\n*Features*"
               if(item.ItemAttributes.Feature.length>0){
                 for(var i=0;i<item.ItemAttributes.Feature.length;i++){
-                  feature_txt += "\n🔹"+item.ItemAttributes.Feature[i];
+                  if(item.ItemAttributes.Feature[i].length<2)
+                    feature_txt += item.ItemAttributes.Feature[i];
+                  else {
+                    feature_txt += "\n🔹"+item.ItemAttributes.Feature[i];
+                  }
                 }
               }
             }
             feature_txt = feature_txt.substring(0,175);
-            feature_txt+="\n ...";
+            feature_txt+=" ...";
             //console.log("feature.length: "+feature_txt.length);
 
             //msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.ASIN+keepaDomain+")";
@@ -261,7 +265,7 @@ var provideResult = function(msg,row){
             itemObj.description = desc;
             //console.log("desc.length: "+desc.length)
             //itemObj.url = item.DetailPageURL;
-            var txt=msg_txt;
+            var txt= msg_txt.substring(0,msg_txt.lastIndexOf(')')+1);
             txt+=feature_txt;
             itemObj.message_text = txt;
             //console.log(txt);
