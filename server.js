@@ -115,9 +115,118 @@ console.log('AMAZON BOT Starded');
  *     FUNCTIONS     *
  ********************/
 
+
+
+
+/**
+ * @name function getItemMsgTxt
+ * @param item object
+ * @desc
+ * @return String
+ */
+var getItemMsgTxt=function(item){
+
+  var msg_txt='';
+
+  //console.log(item);
+  if(item.LargeImage && item.LargeImage.URL)
+    msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
+
+  msg_txt += "\n*"+item.ItemAttributes.Title+"*";
+  msg_txt += "\n▶️ [ "+trad[row.lang].detail+" ]("+item.DetailPageURL+")";
+  if(item.CustomerReviews && item.CustomerReviews.IFrameURL)
+    msg_txt += "\n⭐️[ "+trad[row.lang].review+" ]("+item.DetailPageURL+")";
+  //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
+  //msg_txt+="\n\n"+args.star+" ⭐️";
+  if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing) {
+    msg_txt += "\n\n*"+trad[row.lang].price+"*: " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
+    //console.log(prod.title+" - "+args.price.length)
+    if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
+      //console.log("PRIME")
+      msg_txt += " - ✓Prime"
+    }
+    msg_txt += "\n  _" + item.Offers.Offer.OfferListing.Availability + "_";
+  }
+
+  //console.log(item.Offers);
+  msg_txt += "\n"
+  if (item.OfferSummary && item.OfferSummary.LowestNewPrice && item.OfferSummary.LowestNewPrice.Amount) {
+    msg_txt += "\n*"+trad[row.lang].new+":* " + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+  }
+  if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
+    msg_txt += "\n*"+trad[row.lang].used+":* " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
+  }
+
+
+  return msg_txt;
+
+}
+
+/**
+ * @name function getItemFeatureTxt
+ * @param item object
+ * @desc
+ * @return String
+ */
+var getItemFeatureTxt=function(item){
+
+  var feature_txt='';
+  if(item.ItemAttributes.Feature){
+    feature_txt += "\n\n*Features*"
+    if(item.ItemAttributes.Feature.length>0){
+      for(var i=0;i<item.ItemAttributes.Feature.length;i++){
+        feature_txt += "\n🔹"+item.ItemAttributes.Feature[i];
+      }
+    }
+  }
+  feature_txt = feature_txt.substring(0,175);
+  feature_txt+="\n ...";
+
+
+
+  //console.log("feature.length: "+feature_txt.length);
+
+  //msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.ASIN+keepaDomain+")";
+  /*if(item.ItemAttributes.ProductTypeName=="PHONE"){
+   var gsma_query = msg.query;
+   gsma_query.replace(/\s/g, '+');
+   msg_txt+="\n\n [‌‌GSMArena info]("+gsmarena+gsma_query+")"
+   }*/
+
+  return feature_txt;
+
+}
+
+
+/**
+ * @name function getItemDesc
+ * @param item object
+ * @desc
+ * @return String
+ */
+var getItemDesc=function(item){
+  var desc='';
+  /*if (item.Offers && item.Offers.Offer != null && item.Offers.Offer.OfferListing != null) {
+   desc += trad[row.lang].price+": " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
+   }*/
+  if (item.OfferSummary && item.OfferSummary.LowestNewPrice)
+    desc += trad[row.lang].new+":" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
+  if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
+    desc += " - "+trad[row.lang].used+": " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
+  }
+  if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
+    desc += " ✓Prime"
+  }
+
+  return desc;
+
+}
+
+
+
 /**
  * @name function newUserAlert
- * @param msg
+ * @param msg string
  * @desc this function send msg to answerInlineQuery for lang choice
  */
 var newUserAlert = function(msg){
@@ -139,6 +248,7 @@ var newUserAlert = function(msg){
 
   bot.answerInlineQuery(msg.id, itemsList,{"cache_time" : 300, "is_personal":true});
 }
+
 
 
 /**
@@ -194,68 +304,13 @@ var provideResult = function(msg,row){
             //var gsmarena = "http://www.gsmarena.com/results.php3?sQuickSearch=yes&sName=";
 
             var msg_txt = '';
-            //console.log(item);
-            if(item.LargeImage && item.LargeImage.URL)
-              msg_txt += "[‌‌ ](" + item.LargeImage.URL + ")";
-
-            msg_txt += "\n*"+item.ItemAttributes.Title+"*";
-            msg_txt += "\n▶️ [ "+trad[row.lang].detail+" ]("+item.DetailPageURL+")";
-            if(item.CustomerReviews && item.CustomerReviews.IFrameURL)
-              msg_txt += "\n⭐️[ "+trad[row.lang].review+" ]("+item.DetailPageURL+")";
-            //msg_txt+=" - [🌐]("+item.DetailPageURL+") ";
-            //msg_txt+="\n\n"+args.star+" ⭐️";
-            if (item.Offers && item.Offers.Offer && item.Offers.Offer.OfferListing) {
-              msg_txt += "\n\n*"+trad[row.lang].price+"*: " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
-              //console.log(prod.title+" - "+args.price.length)
-              if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
-                //console.log("PRIME")
-                msg_txt += " - ✓Prime"
-              }
-              msg_txt += "\n  _" + item.Offers.Offer.OfferListing.Availability + "_";
-            }
-
-            //console.log(item.Offers);
-            msg_txt += "\n"
-            if (item.OfferSummary && item.OfferSummary.LowestNewPrice && item.OfferSummary.LowestNewPrice.Amount) {
-              msg_txt += "\n*"+trad[row.lang].new+":* " + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
-            }
-            if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
-              msg_txt += "\n*"+trad[row.lang].used+":* " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
-            }
+            msg_txt=getItemMsgTxt(item);
 
             var feature_txt = '';
-            if(item.ItemAttributes.Feature){
-              feature_txt += "\n\n*Features*"
-              if(item.ItemAttributes.Feature.length>0){
-                for(var i=0;i<item.ItemAttributes.Feature.length;i++){
-                  feature_txt += "\n🔹"+item.ItemAttributes.Feature[i];
-                }
-              }
-            }
-            feature_txt = feature_txt.substring(0,175);
-            feature_txt+="\n ...";
-            //console.log("feature.length: "+feature_txt.length);
+            feature_txt=getItemFeatureTxt(item);
 
-            //msg_txt+="\n\n [‌‌Price tracking by Keepa]("+keepaUrl+item.ASIN+keepaDomain+")";
-            /*if(item.ItemAttributes.ProductTypeName=="PHONE"){
-              var gsma_query = msg.query;
-              gsma_query.replace(/\s/g, '+');
-              msg_txt+="\n\n [‌‌GSMArena info]("+gsmarena+gsma_query+")"
-            }*/
-
-            ///// DESCRIPTION //////
             var desc = "";
-            /*if (item.Offers && item.Offers.Offer != null && item.Offers.Offer.OfferListing != null) {
-              desc += trad[row.lang].price+": " + item.Offers.Offer.OfferListing.Price.FormattedPrice;
-            }*/
-            if (item.OfferSummary && item.OfferSummary.LowestNewPrice)
-              desc += trad[row.lang].new+":" + item.OfferSummary.LowestNewPrice.FormattedPrice + " (" + item.OfferSummary.TotalNew + ")";
-            if (item.OfferSummary && item.OfferSummary.LowestUsedPrice && item.OfferSummary.LowestUsedPrice.Amount) {
-              desc += " - "+trad[row.lang].used+": " + item.OfferSummary.LowestUsedPrice.FormattedPrice + " (" + item.OfferSummary.TotalUsed + ")";
-            }
-            if (item.Offers &&  item.Offers.Offer && item.Offers.Offer.OfferListing && item.Offers.Offer.OfferListing.IsEligibleForPrime) {
-              desc += " ✓Prime"
-            }
+            desc=getItemDesc(item);
 
             // RESULT
             itemObj.parse_mode = 'Markdown';
@@ -266,8 +321,14 @@ var provideResult = function(msg,row){
             //console.log("desc.length: "+desc.length)
             //itemObj.url = item.DetailPageURL;
             var txt=msg_txt;
+
             txt+=feature_txt;
+
+
+
+
             itemObj.message_text = txt;
+
             //console.log(txt);
             //console.log("txt.length: "+txt.length)
 
