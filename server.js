@@ -172,7 +172,7 @@ var getItemFeatureTxt=function(item,row){
 
   var feature_txt='';
   if(item.ItemAttributes.Feature){
-    feature_txt += "\n\n*Features*"
+    feature_txt += trad[row.lang].featuresTitle;
     if(item.ItemAttributes.Feature.length>0){
       for(var i=0;i<item.ItemAttributes.Feature.length;i++){
         feature_txt += "\n🔹"+item.ItemAttributes.Feature[i];
@@ -310,7 +310,7 @@ var provideResult = function(msg,row){
             // RESULT
             itemObj.parse_mode = 'Markdown';
             itemObj.type = 'article';
-            itemObj.id = 'id:'+msg.query.replace(' ','')+row.lang;
+            itemObj.id = 'id:'+(process.hrtime());
             itemObj.title = item.ItemAttributes.Title;
             itemObj.description = desc;
             itemObj.url = item.DetailPageURL;
@@ -550,7 +550,7 @@ var setLoc = function(res, lang){
  ********************/
 
 var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
-var reFastLoc = /^\.loc\s(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)/;
+var reFastLoc = /^\/loc\s(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)/;
 
 
 bot.on('inline_query', function (msg) {
@@ -600,7 +600,7 @@ bot.on('chosen_inline_result', function (res) {
  *     SETTINGS     *
  ********************/
 
-bot.onText(/\/locale (.+)/, function (msg, match) {
+bot.onText(/\/loc (.+)/, function (msg, match) {
   var fromId = msg.chat.id;
   if(regionsId.indexOf(match[1])>-1){
     setLang(msg, match[1])
