@@ -310,7 +310,7 @@ var provideResult = function(msg,row){
             // RESULT
             itemObj.parse_mode = 'Markdown';
             itemObj.type = 'article';
-            itemObj.id = 'id:'+msg.query.replace(' ','')+row.lang;
+            itemObj.id = 'id:'+ (process.hrtime());
             itemObj.title = item.ItemAttributes.Title;
             itemObj.description = desc;
             itemObj.url = item.DetailPageURL;
