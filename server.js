@@ -549,7 +549,7 @@ var setLoc = function(res, lang){
  *      INLINE      *
  ********************/
 
-var reFastSearch = /^\.(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
+var reFastSearch = /^[./](br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)\s(.+)/;
 var reFastLoc = /^\/loc\s(br|ca|cn|fr|de|in|it|jp|mx|es|uk|us)/;
 
 
