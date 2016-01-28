@@ -13,8 +13,6 @@
       "price" : "Prezzo",
       "new"   : "Nuovo",
       "used"  : "Usato",
-      "detail" : "Dettagli",
-      "review" : "Recensioni",
       "madeWith" : "Fatto con",
       "madeWith2" : "da due esseri umani",
       "langSelected" : "Hai impostato la localita' su IT 🇮🇹 ",
@@ -42,8 +40,6 @@
       "price" : "Price",
       "new"   : "New",
       "used"  : "Used",
-      "detail" : "Detail",
-      "review" : "Reviews",
       "madeWith" : "Made with",
       "madeWith2" : "by two human being",
       "langSelected" : "Locale set to US 🇺🇸",
@@ -243,8 +239,8 @@
         "defaultLocaleTxtInline" : "Ich habe US als Standardgebietsschema auf @amaznbot eingestellt",
         "howTo" : "*Wie zu verwenden @amaznbot* \n",
         "featuresTitle":"\n\n*Eigenschaften*",
-        "detail":"Details",
-        "review":"Review"
+        "detail":"Einzelheiten",
+        "review":"Kundenrezensionen"
       },
       "cn" :
         {
