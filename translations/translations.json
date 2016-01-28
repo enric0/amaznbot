@@ -21,7 +21,7 @@
       "noResultTxt" : "Ho cercato su @amaznbot ma non ho trovato niente ☹️",
       "defaultLocale" : "IT è il tuo locale di default",
       "defaultLocaleTxtInline" : "Ho settato l'italiano come locale di default su @amaznbot",
-      "howTo" : "*Come usare @amaznbot* \n",
+      "howTo" : "\nEcco *come usare @amaznbot* \n\n*Ricerca standard:*\n `@amaznbot termine di ricerca`\n   *es:* @amaznbot canon\n_Verra' usata la tua localita' di default_\n\n*Ricerca rapida:*\n  `@amaznbot /loc termine`\n_o_ `@amaznbot .loc termine`\n *es:* @amaznbot /us canon\n_Serve per cercare in altre localita' senza cambiare la localita' di default_\n\n*Cambio localita' veloce:*\n `@amaznbot /loc localita'`\n *es:* @amaznbot /loc us\n_Cambiera' la tua localita' standard_\n\n*Lista localita' disponibili:*",
       "featuresTitle":"\n\n*Caratteristiche*",
       "detail":"Dettagli",
       "review":"Recensioni"
@@ -48,7 +48,7 @@
       "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
       "defaultLocale" : "US is now your default locale",
       "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-      "howTo" : "*How to use @amaznbot* \n",
+      "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
       "featuresTitle":"\n\n*Features*",
       "detail":"Details",
       "review":"Review"
@@ -75,7 +75,7 @@
     "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
     "defaultLocale" : "US is now your default language",
     "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-    "howTo" : "*How to use @amaznbot* \n",
+    "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
     "featuresTitle":"\n\n*Features*",
     "detail":"Details",
     "review":"Review"
@@ -102,7 +102,7 @@
       "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
       "defaultLocale" : "US is now your default language",
       "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-      "howTo" : "*How to use @amaznbot* \n",
+      "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
       "featuresTitle":"\n\n*Features*",
       "detail":"Details",
       "review":"Review"
@@ -129,7 +129,7 @@
         "noResultTxt" : " Eu procurei na Amazon via amaznbot mas eu não consegui encontrar nada ☹️",
         "defaultLocale" : "US é agora o seu idioma padrão ",
         "defaultLocaleTxtInline" : "Eu configurei US como localidade padrão em @amaznbot",
-        "howTo" : "*Como usar  @amaznbot* \n",
+        "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
         "featuresTitle":"\n\n*Características*",
         "detail":"Detalhes",
         "review":"comentário"
@@ -155,7 +155,7 @@
         "noResultTxt" : "He buscado en Amazon a través de amaznbot pero no pude encontrar nada ☹️",
         "defaultLocale" : "US ahora es el idioma predeterminado",
         "defaultLocaleTxtInline" : "He puesto US como por defecto en la configuración regional @amaznbot",
-        "howTo" : "*Cómo utilizar @amaznbot* \n",
+        "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
         "featuresTitle":"\n\n*Caracteristicas*",
         "detail":"Detalles",
         "review":"Revisar"
@@ -182,7 +182,7 @@
         "noResultTxt" : "He buscado en Amazon a través de amaznbot pero no pude encontrar nada ☹️",
         "defaultLocale" : "US ahora es el idioma predeterminado",
         "defaultLocaleTxtInline" : "He puesto US como por defecto en la configuración regional @amaznbot",
-        "howTo" : "*Cómo utilizar @amaznbot* \n",
+        "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
         "featuresTitle":"\n\n*Caracteristicas*",
         "detail":"Detalles",
         "review":"Revisar"
@@ -209,7 +209,7 @@
         "noResultTxt" : "Je l'ai cherché sur Amazon via @amaznbot mais je ne pouvais pas trouver quoi que ce soit ☹️",
         "defaultLocale" : "US est maintenant votre langue par défaut",
         "defaultLocaleTxtInline" : "Je nous ai mis par défaut sur ​​les paramètres régionaux @amaznbot",
-        "howTo" : "*Comment utiliser @amaznbot* \n",
+        "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
         "featuresTitle":"\n\n*Caractéristiques*",
         "detail":"Détails",
         "review":"l'avis"
@@ -237,7 +237,7 @@
         "noResultTxt" : "Ich habe auf Amazon über @amaznbot gesucht , aber ich konnte nichts finden ☹️",
         "defaultLocale" : "US ist jetzt Ihre Standardsprache",
         "defaultLocaleTxtInline" : "Ich habe US als Standardgebietsschema auf @amaznbot eingestellt",
-        "howTo" : "*Wie zu verwenden @amaznbot* \n",
+        "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
         "featuresTitle":"\n\n*Eigenschaften*",
         "detail":"Einzelheiten",
         "review":"Kundenrezensionen"
@@ -264,7 +264,7 @@
           "noResultTxt" : "我已经通过@amaznbot搜查亚马逊，但我无法找到任何东西 ☹️",
           "defaultLocale" : "US 现在是默认语言",
           "defaultLocaleTxtInline" : "我给自己定美国作为@amaznbot默认语言环境",
-          "howTo" : "*如何使用 @amaznbot* \n",
+          "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
           "featuresTitle":"\n\n*特征*",
           "detail":"详细信息",
           "review":"审查"
@@ -291,7 +291,7 @@
         "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
         "defaultLocale" : "US is now your default language",
         "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-        "howTo" : "*How to use @amaznbot* \n",
+        "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
         "featuresTitle":"\n\n*Features*",
         "detail":"Details",
         "review":"Review"
@@ -318,7 +318,7 @@
         "noResultTxt" : "I've searched on Amazon via @amaznbot but I couldn't find anything ☹️",
         "defaultLocale" : "US is now your default language",
         "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
-        "howTo" : "*How to use @amaznbot* \n",
+        "howTo" : "\nHere's *how to use @amaznbot* \n\n*Standard search:*\n `@amaznbot what you want`\n   *ex:* @amaznbot canon\n_The default locale will be used_\n\n*Rapid search:*\n  `@amaznbot /loc something`\n_o_ `@amaznbot .loc something`\n *ex:* @amaznbot /us canon\n_Search in another locale without changing the deault one_\n\n*Change locale inline:*\n `@amaznbot /loc locale'`\n *ex:* @amaznbot /loc es\n_This will change your default locale_\n\n*Locale list:*",
         "featuresTitle":"\n\n*Features*",
         "detail":"Details",
         "review":"Review"

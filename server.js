@@ -181,10 +181,10 @@ bot.onText(/\/help/, function (msg, match) {
     db.get("SELECT user_id,lang FROM users WHERE user_id=?",msg.from.id, function(err, row) {
       // the user is new
       if(row==undefined){
-        bot.sendMessage(fromId, trad[dlang].howTo, {"parse_mode":"Markdown"});
+        bot.sendMessage(fromId, trad[dlang].howTo+languagesList, {"parse_mode":"Markdown"});
       }else{
         // if exists go and does the search then gives back the results
-        bot.sendMessage(fromId, trad[row.lang].howTo, {"parse_mode":"Markdown"});
+        bot.sendMessage(fromId, trad[row.lang].howTo+languagesList, {"parse_mode":"Markdown"});
       }
     });
   });
