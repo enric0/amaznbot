@@ -24,7 +24,9 @@
       "defaultLocale" : "IT è il tuo locale di default",
       "defaultLocaleTxtInline" : "Ho settato l'italiano come locale di default su @amaznbot",
       "howTo" : "*Come usare @amaznbot* \n",
-      "featuresTitle":"\n\n*Caratteristiche*"
+      "featuresTitle":"\n\n*Caratteristiche*",
+      "detail":"Dettagli",
+      "review":"Recensioni"
     },
   "us" :
     {
@@ -51,7 +53,9 @@
       "defaultLocale" : "US is now your default locale",
       "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
       "howTo" : "*How to use @amaznbot* \n",
-      "featuresTitle":"\n\n*Features*"
+      "featuresTitle":"\n\n*Features*",
+      "detail":"Details",
+      "review":"Review"
     },
   "ca" :
   {
@@ -76,7 +80,9 @@
     "defaultLocale" : "US is now your default language",
     "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
     "howTo" : "*How to use @amaznbot* \n",
-    "featuresTitle":"\n\n*Features*"
+    "featuresTitle":"\n\n*Features*",
+    "detail":"Details",
+    "review":"Review"
   },
   "uk" :
     {
@@ -101,7 +107,9 @@
       "defaultLocale" : "US is now your default language",
       "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
       "howTo" : "*How to use @amaznbot* \n",
-      "featuresTitle":"\n\n*Features*"
+      "featuresTitle":"\n\n*Features*",
+      "detail":"Details",
+      "review":"Review"
     },
     "br" :
       {
@@ -126,7 +134,9 @@
         "defaultLocale" : "US é agora o seu idioma padrão ",
         "defaultLocaleTxtInline" : "Eu configurei US como localidade padrão em @amaznbot",
         "howTo" : "*Como usar  @amaznbot* \n",
-        "featuresTitle":"\n\n*Características*"
+        "featuresTitle":"\n\n*Características*",
+        "detail":"Detalhes",
+        "review":"comentário"
       },
     "es" :
       {
@@ -150,7 +160,9 @@
         "defaultLocale" : "US ahora es el idioma predeterminado",
         "defaultLocaleTxtInline" : "He puesto US como por defecto en la configuración regional @amaznbot",
         "howTo" : "*Cómo utilizar @amaznbot* \n",
-        "featuresTitle":"\n\n*Caracteristicas*"
+        "featuresTitle":"\n\n*Caracteristicas*",
+        "detail":"Detalles",
+        "review":"Revisar"
       },
       "mx" :
       {
@@ -175,7 +187,9 @@
         "defaultLocale" : "US ahora es el idioma predeterminado",
         "defaultLocaleTxtInline" : "He puesto US como por defecto en la configuración regional @amaznbot",
         "howTo" : "*Cómo utilizar @amaznbot* \n",
-        "featuresTitle":"\n\n*Caracteristicas*"
+        "featuresTitle":"\n\n*Caracteristicas*",
+        "detail":"Detalles",
+        "review":"Revisar"
       },
       "fr" :
       {
@@ -200,7 +214,9 @@
         "defaultLocale" : "US est maintenant votre langue par défaut",
         "defaultLocaleTxtInline" : "Je nous ai mis par défaut sur ​​les paramètres régionaux @amaznbot",
         "howTo" : "*Comment utiliser @amaznbot* \n",
-        "featuresTitle":"\n\n*Caractéristiques*"
+        "featuresTitle":"\n\n*Caractéristiques*",
+        "detail":"Détails",
+        "review":"l'avis"
       },
 
       "de" :
@@ -226,7 +242,9 @@
         "defaultLocale" : "US ist jetzt Ihre Standardsprache",
         "defaultLocaleTxtInline" : "Ich habe US als Standardgebietsschema auf @amaznbot eingestellt",
         "howTo" : "*Wie zu verwenden @amaznbot* \n",
-        "featuresTitle":"\n\n*Eigenschaften*"
+        "featuresTitle":"\n\n*Eigenschaften*",
+        "detail":"Details",
+        "review":"Review"
       },
       "cn" :
         {
@@ -251,7 +269,9 @@
           "defaultLocale" : "US 现在是默认语言",
           "defaultLocaleTxtInline" : "我给自己定美国作为@amaznbot默认语言环境",
           "howTo" : "*如何使用 @amaznbot* \n",
-          "featuresTitle":"\n\n*特征*"
+          "featuresTitle":"\n\n*特征*",
+          "detail":"详细信息",
+          "review":"审查"
         },
       "jp" :
       {
@@ -276,7 +296,9 @@
         "defaultLocale" : "US is now your default language",
         "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
         "howTo" : "*How to use @amaznbot* \n",
-        "featuresTitle":"\n\n*Features*"
+        "featuresTitle":"\n\n*Features*",
+        "detail":"Details",
+        "review":"Review"
       },
       "in" :
       {
@@ -301,7 +323,9 @@
         "defaultLocale" : "US is now your default language",
         "defaultLocaleTxtInline" : "I've set US as default locale on @amaznbot",
         "howTo" : "*How to use @amaznbot* \n",
-        "featuresTitle":"\n\n*Features*"
+        "featuresTitle":"\n\n*Features*",
+        "detail":"Details",
+        "review":"Review"
       }
 
 }
