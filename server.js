@@ -194,3 +194,8 @@ bot.onText(/\/about/, function (msg, match) {
   var fromId = msg.chat.id;
   bot.sendMessage(fromId, "*Made with* <3 by two humans ", {"parse_mode":"Markdown"});
 });
+
+bot.onText(/\/start/, function (msg, match) {
+    var fromId = msg.chat.id;
+    bot.sendMessage(fromId, trad[dlang].howTo+languagesList, {"parse_mode":"Markdown"});
+});
